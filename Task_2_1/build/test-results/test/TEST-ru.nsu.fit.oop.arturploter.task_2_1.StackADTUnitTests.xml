@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ru.nsu.fit.oop.arturploter.task_2_1.StackADTUnitTests" tests="7" skipped="0" failures="0" errors="0" timestamp="2019-10-30T13:53:32" hostname="DESKTOP-LDMUS9P" time="0.012">
+<testsuite name="ru.nsu.fit.oop.arturploter.task_2_1.StackADTUnitTests" tests="7" skipped="0" failures="0" errors="0" timestamp="2019-10-30T16:59:13" hostname="DESKTOP-LDMUS9P" time="0.012">
   <properties/>
-  <testcase name="givenIntegerStack" classname="ru.nsu.fit.oop.arturploter.task_2_1.StackADTUnitTests" time="0.004"/>
-  <testcase name="throwsUnsupportedOperationExceptionIfTheRemoveMethodWasCalled" classname="ru.nsu.fit.oop.arturploter.task_2_1.StackADTUnitTests" time="0.003"/>
+  <testcase name="givenIntegerStack" classname="ru.nsu.fit.oop.arturploter.task_2_1.StackADTUnitTests" time="0.005"/>
+  <testcase name="throwsUnsupportedOperationExceptionIfTheRemoveMethodWasCalled" classname="ru.nsu.fit.oop.arturploter.task_2_1.StackADTUnitTests" time="0.002"/>
   <testcase name="throwsStackUnderflowExceptionIfThePopMethodWasCalledOnTheEmptyStack" classname="ru.nsu.fit.oop.arturploter.task_2_1.StackADTUnitTests" time="0.002"/>
   <testcase name="givenCharacterArrayStack" classname="ru.nsu.fit.oop.arturploter.task_2_1.StackADTUnitTests" time="0.001"/>
   <testcase name="givenStringStack" classname="ru.nsu.fit.oop.arturploter.task_2_1.StackADTUnitTests" time="0.001"/>
-  <testcase name="givenDateStack" classname="ru.nsu.fit.oop.arturploter.task_2_1.StackADTUnitTests" time="0.0"/>
-  <testcase name="throwsStackUnderflowExceptionIfTheNextMethodWasCalledOnTheEmptyStack" classname="ru.nsu.fit.oop.arturploter.task_2_1.StackADTUnitTests" time="0.001"/>
+  <testcase name="givenDateStack" classname="ru.nsu.fit.oop.arturploter.task_2_1.StackADTUnitTests" time="0.001"/>
+  <testcase name="throwsStackUnderflowExceptionIfTheNextMethodWasCalledOnTheEmptyStack" classname="ru.nsu.fit.oop.arturploter.task_2_1.StackADTUnitTests" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

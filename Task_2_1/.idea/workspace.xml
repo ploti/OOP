@@ -29,17 +29,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/ru/nsu/fit/oop/arturploter/task_2_1/StackADT.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="78" column="9" lean-forward="true" selection-start-line="78" selection-start-column="9" selection-end-line="78" selection-end-column="9" />
+            <state relative-caret-position="341">
+              <caret line="68" column="25" lean-forward="true" selection-start-line="68" selection-start-column="25" selection-end-line="68" selection-end-column="25" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/ru/nsu/fit/oop/arturploter/task_2_1/StackADTUnitTests.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="35" selection-start-line="7" selection-start-column="35" selection-end-line="7" selection-end-column="35" />
+            <state relative-caret-position="307">
+              <caret line="158" column="9" selection-start-line="158" selection-start-column="9" selection-end-line="158" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -53,7 +53,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/ru/nsu/fit/oop/arturploter/task_2_1/StackUnderflowException.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="102">
@@ -72,15 +72,21 @@
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>throws</find>
+      <find>throw</find>
+    </findStrings>
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/main/java/ru/nsu/fit/oop/arturploter/task_2_1/StackUncheckedException.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ru/nsu/fit/oop/arturploter/task_2_1/StackUnderflowException.java" />
         <option value="$PROJECT_DIR$/src/test/java/StackADTUnitTests.java" />
         <option value="$PROJECT_DIR$/src/test/java/df.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ru/nsu/fit/oop/arturploter/task_2_1/StackADT.java" />
         <option value="$PROJECT_DIR$/src/test/java/ru/nsu/fit/oop/arturploter/task_2_1/StackADTUnitTests.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ru/nsu/fit/oop/arturploter/task_2_1/StackUnderflowException.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ru/nsu/fit/oop/arturploter/task_2_1/StackADT.java" />
       </list>
     </option>
   </component>
@@ -94,6 +100,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -152,8 +160,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -289,12 +295,14 @@
     <history-entry file="StackADTUnitTests - 2019.10.30 at 20h 53m 32s.xml">
       <configuration name="StackADTUnitTests" configurationId="GradleRunConfiguration" />
     </history-entry>
+    <history-entry file="StackADTUnitTests - 2019.10.30 at 23h 59m 13s.xml">
+      <configuration name="StackADTUnitTests" configurationId="GradleRunConfiguration" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1066" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12440381" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12599364" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -303,7 +311,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3290461" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3290461" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -324,24 +332,11 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/test/java/df.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="1" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/ru/nsu/fit/oop/arturploter/task_2_1/StackADTUnitTests.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="35" selection-start-line="7" selection-start-column="35" selection-end-line="7" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/df.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/ru/nsu/fit/oop/arturploter/task_2_1/StackADT.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="78" column="9" lean-forward="true" selection-start-line="78" selection-start-column="9" selection-end-line="78" selection-end-column="9" />
+        <state relative-caret-position="341">
+          <caret line="68" column="25" lean-forward="true" selection-start-line="68" selection-start-column="25" selection-end-line="68" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -356,6 +351,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="6" column="1" lean-forward="true" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/ru/nsu/fit/oop/arturploter/task_2_1/StackADTUnitTests.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="307">
+          <caret line="158" column="9" selection-start-line="158" selection-start-column="9" selection-end-line="158" selection-end-column="9" />
         </state>
       </provider>
     </entry>

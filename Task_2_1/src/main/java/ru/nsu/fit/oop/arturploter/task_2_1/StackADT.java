@@ -37,7 +37,6 @@ public class StackADT<T> implements Iterable<T> {
      * Removes an object at the top of the stack and returns it.
      *
      * @return  an object at the top of the stack
-     * @throws  StackUnderflowException  if the stack is empty
      */
     public T pop() {
         if (items.isEmpty()) {
