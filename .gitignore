@@ -1,21 +1,15 @@
-# Java
 *.jar
 *.war
+gradlew
 *.nar
 *.ear
 *.zip
 *.java
 *.tar.gz
-*.rar 
-
-# IntelliJ
+*.rar
 out/
 build/
 .gradle/
 .idea/
 settings.gradle
- 
-# Gradle
-.idea/**/gradle.xml
-.idea/**/libraries
-gradlew.bat
+wrapper
