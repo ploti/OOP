@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.nsu.fit.oop.arturploter.task_1_2.AdjMatrixInUnitTests" tests="12" skipped="0" failures="0" errors="0" timestamp="2019-10-30T12:56:45" hostname="DESKTOP-LDMUS9P" time="0.014">
+  <properties/>
+  <testcase name="given_1x1matrix_When_InputIsCorrect_Then_0Returned" classname="ru.nsu.fit.oop.arturploter.task_1_2.AdjMatrixInUnitTests" time="0.006"/>
+  <testcase name="given_9x9matrix_When_CorrectInput_Then_ShortestPathReturned" classname="ru.nsu.fit.oop.arturploter.task_1_2.AdjMatrixInUnitTests" time="0.001"/>
+  <testcase name="given_3x3matrix_When_CorrectInput_Then_ShortestPathReturned" classname="ru.nsu.fit.oop.arturploter.task_1_2.AdjMatrixInUnitTests" time="0.0"/>
+  <testcase name="given_6x6matrix_When_InvalidSource_Then_ExceptionThrown" classname="ru.nsu.fit.oop.arturploter.task_1_2.AdjMatrixInUnitTests" time="0.004"/>
+  <testcase name="given_EmptyMatrix_Then_ExceptionThrown" classname="ru.nsu.fit.oop.arturploter.task_1_2.AdjMatrixInUnitTests" time="0.001"/>
+  <testcase name="given_6x6matrix_When_InvalidDestPassedInConstructor_Then_ExceptionThrown" classname="ru.nsu.fit.oop.arturploter.task_1_2.AdjMatrixInUnitTests" time="0.0"/>
+  <testcase name="given_6x6matrix_When_InvalidDestPassedInMethod_Then_ExceptionThrown" classname="ru.nsu.fit.oop.arturploter.task_1_2.AdjMatrixInUnitTests" time="0.001"/>
+  <testcase name="given_6x6matrixWithNegativeCycle_When_CycleIsUnreachableFromSource_Then_ShortestPathReturned" classname="ru.nsu.fit.oop.arturploter.task_1_2.AdjMatrixInUnitTests" time="0.0"/>
+  <testcase name="given_3x3matrixWithNegativeCycle_When_CycleIsReachableFromSource_Then_ExceptionThrown" classname="ru.nsu.fit.oop.arturploter.task_1_2.AdjMatrixInUnitTests" time="0.0"/>
+  <testcase name="given_6x6matrix_When_InvalidEdgeWeight_Then_ExceptionThrown" classname="ru.nsu.fit.oop.arturploter.task_1_2.AdjMatrixInUnitTests" time="0.0"/>
+  <testcase name="given_6x6matrixWithNegativeCycle_When_CycleIsReachableFromSource_Then_ExceptionThrown" classname="ru.nsu.fit.oop.arturploter.task_1_2.AdjMatrixInUnitTests" time="0.0"/>
+  <testcase name="given_6x6matrix_When_DestIsUnreachableFromSource_Then_ExceptionThrown" classname="ru.nsu.fit.oop.arturploter.task_1_2.AdjMatrixInUnitTests" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
