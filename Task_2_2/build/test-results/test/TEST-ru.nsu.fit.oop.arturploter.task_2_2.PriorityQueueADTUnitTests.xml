@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.nsu.fit.oop.arturploter.task_2_2.PriorityQueueADTUnitTests" tests="10" skipped="0" failures="0" errors="0" timestamp="2019-10-30T16:08:41" hostname="DESKTOP-4BI152D" time="0.021">
+  <properties/>
+  <testcase name="givenKeyIntegerValueIntegerPriorityQueue" classname="ru.nsu.fit.oop.arturploter.task_2_2.PriorityQueueADTUnitTests" time="0.008"/>
+  <testcase name="throwsQueueEmptyExceptionIfTheRemoveMaxMethodWasCalledOnAnEmptyPriorityQueue" classname="ru.nsu.fit.oop.arturploter.task_2_2.PriorityQueueADTUnitTests" time="0.005"/>
+  <testcase name="givenKeyShortValueBytePriorityQueue" classname="ru.nsu.fit.oop.arturploter.task_2_2.PriorityQueueADTUnitTests" time="0.001"/>
+  <testcase name="throwsUnsupportedOperationExceptionIfTheRemoveMethodWasCalled" classname="ru.nsu.fit.oop.arturploter.task_2_2.PriorityQueueADTUnitTests" time="0.0"/>
+  <testcase name="givenKeyStringValueDoublePriorityQueue" classname="ru.nsu.fit.oop.arturploter.task_2_2.PriorityQueueADTUnitTests" time="0.0"/>
+  <testcase name="throwsIllegalArgumentExceptionIfTheInsertMethodWasCalledWithTheKeyThatIsInThePriorityQueue" classname="ru.nsu.fit.oop.arturploter.task_2_2.PriorityQueueADTUnitTests" time="0.003"/>
+  <testcase name="throwsQueueEmptyExceptionIfTheNextMethodWasCalledOnAnEmptyPriorityQueue" classname="ru.nsu.fit.oop.arturploter.task_2_2.PriorityQueueADTUnitTests" time="0.001"/>
+  <testcase name="throwsIllegalArgumentExceptionIfTheInsertMethodWasCalledWithTheNullKey" classname="ru.nsu.fit.oop.arturploter.task_2_2.PriorityQueueADTUnitTests" time="0.0"/>
+  <testcase name="givenKeyCharacterValueBooleanPriorityQueue" classname="ru.nsu.fit.oop.arturploter.task_2_2.PriorityQueueADTUnitTests" time="0.0"/>
+  <testcase name="givenKeyStringValueDateArrayPriorityQueue" classname="ru.nsu.fit.oop.arturploter.task_2_2.PriorityQueueADTUnitTests" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
