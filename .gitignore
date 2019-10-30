@@ -1,4 +1,4 @@
-### Java ###
+# Java
 *.jar
 *.war
 *.nar
@@ -8,18 +8,14 @@
 *.tar.gz
 *.rar 
 
-### IntelliJ ###
+# IntelliJ
 out/
 build/
 .gradle/
 .idea/
 settings.gradle
  
-### Gradle ###
-gradlew.bat
+# Gradle
 .idea/**/gradle.xml
-<<<<<<< HEAD
 .idea/**/libraries
-=======
-.idea/**/libraries
->>>>>>> da893431efea054b7adec621a531cbc66cceb53b
+gradlew.bat
