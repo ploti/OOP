@@ -18,4 +18,8 @@ settings.gradle
 ### Gradle ###
 gradlew.bat
 .idea/**/gradle.xml
+<<<<<<< HEAD
 .idea/**/libraries
+=======
+.idea/**/libraries
+>>>>>>> da893431efea054b7adec621a531cbc66cceb53b
