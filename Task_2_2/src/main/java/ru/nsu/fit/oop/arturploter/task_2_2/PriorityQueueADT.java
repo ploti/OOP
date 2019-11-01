@@ -1,6 +1,7 @@
 package ru.nsu.fit.oop.arturploter.task_2_2;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * The {@code PriorityQueueADT} class represents a generic priority queue.
@@ -52,7 +53,7 @@ public class PriorityQueueADT<K extends Comparable<K>, V> implements Iterable<K>
      */
     public Pair<K, V> removeMax() {
         if (isEmpty()) {
-            throw new QueueEmptyException();
+            throw new NoSuchElementException("The priority queue is empty.");
         }
 
         K rootKey = binaryHeap.getKey(0);
@@ -132,13 +133,13 @@ public class PriorityQueueADT<K extends Comparable<K>, V> implements Iterable<K>
 
         public K next() {
             if (!hasNext()) {
-                throw new QueueEmptyException();
+                throw new NoSuchElementException("The priority queue is empty.");
             }
 
             K key = null;
             try {
                 key = copy.removeMax().getFirst();
-            } catch (QueueEmptyException e) {
+            } catch (NoSuchElementException e) {
                 System.out.println(e.getMessage());
             }
 

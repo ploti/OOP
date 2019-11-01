@@ -194,11 +194,11 @@ public class PriorityQueueADTUnitTests {
     }
 
     @Test
-    public void throwsQueueEmptyExceptionIfTheRemoveMaxMethodWasCalledOnAnEmptyPriorityQueue() {
+    public void throwsNoSuchElementExceptionIfTheRemoveMaxMethodWasCalledOnAnEmptyPriorityQueue() {
         PriorityQueueADT<Double, Long> priorityQueue = new PriorityQueueADT<>();
         Pair<Double, Long> max;
 
-        exception.expect(QueueEmptyException.class);
+        exception.expect(NoSuchElementException.class);
         max = priorityQueue.removeMax();
     }
 
@@ -216,14 +216,14 @@ public class PriorityQueueADTUnitTests {
     }
 
     @Test
-    public void throwsQueueEmptyExceptionIfTheNextMethodWasCalledOnAnEmptyPriorityQueue() {
+    public void throwsNoSuchElementExceptionIfTheNextMethodWasCalledOnAnEmptyPriorityQueue() {
         PriorityQueueADT<Integer, Integer> priorityQueue = new PriorityQueueADT<>();
         priorityQueue.insert(314, 10200);
         priorityQueue.insert(433, 10100);
         priorityQueue.insert(1616, 25540);
         priorityQueue.insert(131, 10200);
 
-        exception.expect(QueueEmptyException.class);
+        exception.expect(NoSuchElementException.class);
 
         Iterator<Integer> i = priorityQueue.iterator();
         while(i.hasNext()) {
