@@ -21,14 +21,31 @@ public class HeapSortUnitTests {
 
     @Test
     public void given_IntegerList_Then_ReturnSortedIntegerList() {
+        int streamSize = 7783646;
+        int mb = 1024 * 1024;
+        Runtime runtime = Runtime.getRuntime();
+
+        // Sizes of the reference and the primitive wrapped in an object depend on the platform
+        System.out.println("Used memory before initializing " + streamSize + " references to an object " +
+                "in the randomIntegers list and " + streamSize + " int primitives wrapped to an Integer: " +
+                (runtime.totalMemory() - runtime.freeMemory()) / mb + " MB.");
+
         ArrayList<Integer> randomIntegers = new Random()
-                .ints(783646, -5000, 5000).boxed()
+                .ints(streamSize, -5000, 5000).boxed()
                 .collect(Collectors.toCollection(ArrayList::new));
+
+        System.out.println("Used memory after initializing " + streamSize + " references to an object " +
+                "in the randomIntegers list and " + streamSize + " int primitives wrapped to an Integer: " +
+                (runtime.totalMemory() - runtime.freeMemory()) / mb + " MB.");
 
         List<Integer> actual = HeapSort.sort(randomIntegers);
         Collections.sort(randomIntegers);
 
-        assertThat(randomIntegers, is(randomIntegers));
+        System.out.println("Used memory after initializing extra "
+                + streamSize + " references to an object in the actual list: "
+                + (runtime.totalMemory() - runtime.freeMemory()) / mb + " MB.");
+
+        assertThat(actual, is(randomIntegers));
     }
 
     @Test
@@ -109,10 +126,10 @@ public class HeapSortUnitTests {
     }
 
     private class Employee implements Comparable<Employee> {
-        private UUID id;
-        private String name;
-        private int age;
-        private int salary;
+        private final UUID id;
+        private final String name;
+        private final int age;
+        private final int salary;
 
         public Employee(String name, int age, int salary) {
             id = UUID.randomUUID();
