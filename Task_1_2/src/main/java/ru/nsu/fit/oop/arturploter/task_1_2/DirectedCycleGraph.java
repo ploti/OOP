@@ -3,8 +3,8 @@ package ru.nsu.fit.oop.arturploter.task_1_2;
 import java.util.*;
 
 class DirectedCycleGraph {
-    private List<Integer> visited;
-    private List<Integer> toBeProcessed;
+    private final List<Integer> visited;
+    private final List<Integer> toBeProcessed;
     private boolean hasCycle;
 
     DirectedCycleGraph(AdjListDigraph graph) {

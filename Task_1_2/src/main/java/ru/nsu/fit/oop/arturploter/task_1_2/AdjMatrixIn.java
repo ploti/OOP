@@ -1,6 +1,7 @@
 package ru.nsu.fit.oop.arturploter.task_1_2;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 /**
  * The {@code AdjMatrixIn} class represents a weighted directed graph with integer weights.
@@ -11,14 +12,13 @@ import java.util.Arrays;
  * as the Bellman-Ford algorithm.
  *
  * The graph is represented by an adjacency matrix.
- * Each weight has to be less than {@code Integer.MAX_VALUE}.
  *
  * @author  Artur Ploter
  */
 public class AdjMatrixIn {
-    private MooreShortestPaths shortestPaths;
-    private int dest;
-    private int[][] adjMatrix;
+    private final MooreShortestPaths shortestPaths;
+    private final int dest;
+    private final int[][] adjMatrix;
 
     /**
      * Constructs a weighted directed graph with the edges and weights from the {@code adjMatrix} graph, and computes
@@ -36,14 +36,10 @@ public class AdjMatrixIn {
         this.dest = dest - 1;
         this.adjMatrix = adjMatrix;
 
-        // Replace nested loops with Java 8 streams
-        for (int i = 0; i < numOfVertices; i++) {
-            for (int j = 0; j < numOfVertices; j++) {
-                if (adjMatrix[i][j] != 0) {
-                    graph.addEdge(i, j, adjMatrix[i][j]);
-                }
-            }
-        }
+        IntStream.range(0, numOfVertices)
+                .forEach(i -> IntStream.range(0, numOfVertices)
+                .filter(j -> adjMatrix[i][j] != 0)
+                .forEach(j -> graph.addEdge(i, j, adjMatrix[i][j])));
 
         shortestPaths = new MooreShortestPaths(graph, source - 1);
     }
@@ -53,7 +49,7 @@ public class AdjMatrixIn {
      *
      * @return  the length of the shortest path from {@code source} to {@code dest}
      */
-    public int distTo() {
+    public long distTo() {
         return shortestPaths.distTo(dest);
     }
 
@@ -63,7 +59,7 @@ public class AdjMatrixIn {
      * @param   dest  the destination vertex
      * @return  the length of the shortest path from {@code source} to {@code dest}
      */
-    public int distTo(int dest) {
+    public long distTo(int dest) {
         validateDest(dest);
         return shortestPaths.distTo(dest - 1);
     }
@@ -85,12 +81,12 @@ public class AdjMatrixIn {
                 throw new IllegalArgumentException(Arrays.deepToString(adjMatrix) + " is not an adjacency matrix.");
             }
 
-            for (int weight : matrix) {
-                if (weight == Integer.MAX_VALUE) {
-                    throw new IllegalArgumentException("Maximum allowed edge weight is "
-                            + Integer.sum(Integer.MAX_VALUE, -1));
-                }
-            }
+//            for (int weight : matrix) {
+//                if (weight == Integer.MAX_VALUE) {
+//                    throw new IllegalArgumentException("Maximum allowed edge weight is "
+//                            + Integer.sum(Integer.MAX_VALUE, -1));
+//                }
+//            }
         }
     }
 

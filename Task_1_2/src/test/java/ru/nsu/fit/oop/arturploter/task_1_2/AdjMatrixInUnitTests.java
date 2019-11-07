@@ -5,15 +5,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.Stack;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.junit.Assert.assertThat;
 
 public final class AdjMatrixInUnitTests {
     private AdjMatrixIn adjMatrix;
-    private Stack<Integer> stack = new Stack<>();
 
     @After
     public void tearDown() {
@@ -28,9 +25,9 @@ public final class AdjMatrixInUnitTests {
                 {2, 1, 0}
         });
 
-        assertThat(adjMatrix.distTo(), is(3));
-        assertThat(adjMatrix.distTo(2), is(0));
-        assertThat(adjMatrix.distTo(3), is(1));
+        assertThat(adjMatrix.distTo(), is(3L));
+        assertThat(adjMatrix.distTo(2), is(0L));
+        assertThat(adjMatrix.distTo(3), is(1L));
     }
 
     @Test
@@ -47,15 +44,45 @@ public final class AdjMatrixInUnitTests {
                 {0, 0, 2, 0, 0, 0, 6, 7, 0}
         });
 
-        assertThat(adjMatrix.distTo(), is(19));
-        assertThat(adjMatrix.distTo(1), is(0));
-        assertThat(adjMatrix.distTo(2), is(4));
-        assertThat(adjMatrix.distTo(3), is(12));
-        assertThat(adjMatrix.distTo(5), is(21));
-        assertThat(adjMatrix.distTo(6), is(11));
-        assertThat(adjMatrix.distTo(7), is(9));
-        assertThat(adjMatrix.distTo(8), is(8));
-        assertThat(adjMatrix.distTo(9), is(14));
+        assertThat(adjMatrix.distTo(), is(19L));
+        assertThat(adjMatrix.distTo(1), is(0L));
+        assertThat(adjMatrix.distTo(2), is(4L));
+        assertThat(adjMatrix.distTo(3), is(12L));
+        assertThat(adjMatrix.distTo(5), is(21L));
+        assertThat(adjMatrix.distTo(6), is(11L));
+        assertThat(adjMatrix.distTo(7), is(9L));
+        assertThat(adjMatrix.distTo(8), is(8L));
+        assertThat(adjMatrix.distTo(9), is(14L));
+    }
+
+    @Test
+    public void given_3x3matrixWithMaxIntWeights_When_CorrectInput_Then_ShortestPathReturned() {
+        adjMatrix = new AdjMatrixIn(2, 1, new int[][]{
+                {Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE},
+                {Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE},
+                {Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE}
+        });
+
+        assertThat(adjMatrix.distTo(), is((long) Integer.MAX_VALUE));
+        assertThat(adjMatrix.distTo(2), is(0L));
+        assertThat(adjMatrix.distTo(3), is((long) Integer.MAX_VALUE));
+    }
+
+    @Test
+    public void given_6x6matrix_When_OneOfTheWeightsIsIntMax_Then_ShortestPathReturned() {
+        adjMatrix = new AdjMatrixIn(1, 3, new int[][]{
+                {3, 1, -3, 0, 0, 0},
+                {0, 0, 3, 0, 0, -1},
+                {0, 0, 0, 0, 0, Integer.MAX_VALUE},
+                {0, 0, 3, 0, -2, 0},
+                {0, 0, 0, 0, -2, 0},
+                {0, 0, 0, 0, 0, 0}
+        });
+
+        assertThat(adjMatrix.distTo(), is(-3L));
+        assertThat(adjMatrix.distTo(1), is(0L));
+        assertThat(adjMatrix.distTo(2), is(1L));
+        assertThat(adjMatrix.distTo(6), is(0L));
     }
 
     @Test
@@ -69,10 +96,10 @@ public final class AdjMatrixInUnitTests {
                 {0, 0, 0, 0, 0, 0}
         });
 
-        assertThat(adjMatrix.distTo(), is(-3));
-        assertThat(adjMatrix.distTo(1), is(0));
-        assertThat(adjMatrix.distTo(2), is(1));
-        assertThat(adjMatrix.distTo(6), is(0));
+        assertThat(adjMatrix.distTo(), is(-3L));
+        assertThat(adjMatrix.distTo(1), is(0L));
+        assertThat(adjMatrix.distTo(2), is(1L));
+        assertThat(adjMatrix.distTo(6), is(0L));
     }
 
     @Test
@@ -81,11 +108,11 @@ public final class AdjMatrixInUnitTests {
                 {1}
         });
 
-        assertThat(adjMatrix.distTo(), is(0));
+        assertThat(adjMatrix.distTo(), is(0L));
     }
 
     @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    public final ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void given_3x3matrixWithNegativeCycle_When_CycleIsReachableFromSource_Then_ExceptionThrown()
@@ -182,20 +209,20 @@ public final class AdjMatrixInUnitTests {
         adjMatrix.distTo(dest);
     }
 
-    @Test
-    public void given_6x6matrix_When_InvalidEdgeWeight_Then_ExceptionThrown() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage(startsWith("Maximum allowed edge weight is"));
-
-        new AdjMatrixIn(1, 3, new int[][]{
-                {3, 1, -3, 0, 0, 0},
-                {0, 0, 3, 0, 0, -1},
-                {0, 0, 0, 0, 0, Integer.MAX_VALUE},
-                {0, 0, 3, 0, -2, 0},
-                {0, 0, 0, 0, -2, 0},
-                {0, 0, 0, 0, 0, 0}
-        });
-    }
+//    @Test
+//    public void given_6x6matrix_When_InvalidEdgeWeight_Then_ExceptionThrown() {
+//        thrown.expect(IllegalArgumentException.class);
+//        thrown.expectMessage(startsWith("Maximum allowed edge weight is"));
+//
+//        new AdjMatrixIn(1, 3, new int[][]{
+//                {3, 1, -3, 0, 0, 0},
+//                {0, 0, 3, 0, 0, -1},
+//                {0, 0, 0, 0, 0, Integer.MAX_VALUE},
+//                {0, 0, 3, 0, -2, 0},
+//                {0, 0, 0, 0, -2, 0},
+//                {0, 0, 0, 0, 0, 0}
+//        });
+//    }
 
     @Test
     public void given_EmptyMatrix_Then_ExceptionThrown() {

@@ -1,25 +1,25 @@
 package ru.nsu.fit.oop.arturploter.task_1_2;
 
 import java.util.*;
-import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 import static java.util.stream.Collectors.toList;
 
 class MooreShortestPaths {
-    private List<Integer> distTo;
-    private Map<Integer, DirEdgeWithWeight> edgeTo;
-    private Queue<Integer> queue;
+    private final List<Long> distTo;
+    private final Map<Integer, DirEdgeWithWeight> edgeTo;
+    private final Queue<Integer> queue;
     private int timesRelaxed;
     private boolean hasNegativeCycle;
 
     MooreShortestPaths(AdjListDigraph graph, int source) {
-        distTo = IntStream.range(0, graph.getNumOfVertices()).mapToObj(i -> Integer.MAX_VALUE).collect(toList());
+        distTo = LongStream.range(0, graph.getNumOfVertices()).mapToObj(i -> Long.MAX_VALUE).collect(toList());
         edgeTo = new HashMap<>();
         queue = new LinkedList<>();
         timesRelaxed = 0;
         hasNegativeCycle = false;
 
-        distTo.set(source, 0);
+        distTo.set(source, 0L);
         queue.add(source);
 
         while (!queue.isEmpty() && !hasNegativeCycle) {
@@ -28,11 +28,11 @@ class MooreShortestPaths {
         }
     }
 
-    int distTo(int dest) {
+    long distTo(int dest) {
         if (hasNegativeCycle) {
             throw new UnsupportedOperationException("Negative cycle is reachable from the source vertex.");
         }
-        if (distTo.get(dest) == Integer.MAX_VALUE) {
+        if (distTo.get(dest) == Long.MAX_VALUE) {
             throw new UnsupportedOperationException(Integer.sum(dest, 1)
                     + " is unreachable from the source vertex.");
         }

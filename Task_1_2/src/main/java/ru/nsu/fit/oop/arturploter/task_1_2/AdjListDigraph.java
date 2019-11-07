@@ -6,7 +6,7 @@ import java.util.Map;
 
 class AdjListDigraph {
     private final int numOfVertices;
-    private Map<Integer, ArrayList<DirEdgeWithWeight>> outgoingEdges;
+    private final Map<Integer, ArrayList<DirEdgeWithWeight>> outgoingEdges;
 
     AdjListDigraph(int numOfVertices) {
         this.numOfVertices = numOfVertices;
