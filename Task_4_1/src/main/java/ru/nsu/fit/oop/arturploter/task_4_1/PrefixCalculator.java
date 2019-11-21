@@ -223,6 +223,7 @@ public class PrefixCalculator {
                 break;
 
             case "/":
+                validateDivisor(operand2);
                 result = operand1 / operand2;
                 break;
 
@@ -246,6 +247,12 @@ public class PrefixCalculator {
         }
 
         return result;
+    }
+
+    private static void validateDivisor(double divisor) {
+        if (divisor == 0.0) {
+            throw new IllegalArgumentException("Cannot divide by zero.");
+        }
     }
 
     private static void validateLogarithmParameters(double operand2, double operand1) {

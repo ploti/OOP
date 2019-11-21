@@ -156,6 +156,17 @@ class PrefixCalculatorUnitTests {
         class ExceptionsTests {
 
             @Test
+            void should_ThrowIllegalArgumentException_When_AttemptedToDivideByZero() {
+                String inputString = "/17 0" + System.getProperty("line.separator") + "0"
+                        + System.getProperty("line.separator");
+
+                System.setIn(new ByteArrayInputStream(inputString.getBytes()));
+
+                Exception exception = assertThrows(IllegalArgumentException.class, PrefixCalculator::start);
+                assertEquals("Cannot divide by zero.", exception.getMessage());
+            }
+
+            @Test
             void should_ThrowIllegalArgumentException_When_LogarithmOfZeroWithBaseZeroIsToBeCalculated() {
                 String inputString = "log0 0" + System.getProperty("line.separator") + "0"
                         + System.getProperty("line.separator");
@@ -326,6 +337,14 @@ class PrefixCalculatorUnitTests {
         @Nested
         @DisplayName("Exceptions tests")
         class ExceptionsTests {
+
+            @Test
+            void should_ThrowIllegalArgumentException_When_AttemptedToDivideByZero() {
+                Exception exception
+                        = assertThrows(IllegalArgumentException.class, () -> calculator.calculate("/51 0"));
+
+                assertEquals("Cannot divide by zero.", exception.getMessage());
+            }
 
             @Test
             void should_ThrowIllegalArgumentException_When_LogarithmOfZeroWithBaseZeroIsToBeCalculated() {
