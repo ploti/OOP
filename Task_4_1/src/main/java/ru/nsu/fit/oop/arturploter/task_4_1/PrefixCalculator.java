@@ -5,12 +5,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * The {@code PrefixCalculator} class represents a calculator that evaluates prefix expression.
- * It supports some basic arithmetic (+, -, *, /) and can calculate some trigonometric (sin, cos), logarithmic (log),
+ * The {@code PrefixCalculator} class represents a calculator that evaluates prefix expressions.
+ * It supports some basic arithmetic (+, -, *, /) and can calculate trigonometric (sin, cos), logarithmic (log),
  * square-root (sqrt) and exponential (pow) expressions.
  *
- * It has methods that can read an expression from Standard Input as well as take a string containing an expression
- * from the user.
+ * It has the {@code start} method that reads an expression from Standard Input and the {@code calculate} method
+ * that takes a string containing an expression.
  *
  * @author  Artur Ploter
  */
