@@ -128,6 +128,26 @@ class KMPSubstringSearchUnitTests {
         assertEquals(offset, -1);
     }
 
+    @Test
+    void should_Return47_When_AttemptedToFindPapirosaInTextFile13() {
+        String pattern = "папироса";
+        String filePath = "src/test/resources/text_file_13.txt";
+
+        KMPSubstringSearch obj = new KMPSubstringSearch(pattern);
+        int offset = obj.readInFileAndSearch(filePath);
+        assertEquals(offset, 47);
+    }
+
+    @Test
+    void should_Return7_When_AttemptedToFindPirogInTextFile14() {
+        String pattern = "пирог";
+        String filePath = "src/test/resources/text_file_14.txt";
+
+        KMPSubstringSearch obj = new KMPSubstringSearch(pattern);
+        int offset = obj.readInFileAndSearch(filePath);
+        assertEquals(offset, 7);
+    }
+
     @Disabled("Do not run unless you have the large_text_file1.txt file located in src\\test\\resources\\ directory")
     @Test
     void should_Return810000001_When_AttemptedToFindAbafInLargeTextFile1() {
