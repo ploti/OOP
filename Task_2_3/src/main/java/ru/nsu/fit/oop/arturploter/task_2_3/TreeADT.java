@@ -1,6 +1,7 @@
 package ru.nsu.fit.oop.arturploter.task_2_3;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * The {@code TreeADT} class represents a tree data structure.
@@ -13,6 +14,7 @@ import java.util.*;
 public class TreeADT<T> implements Iterable<T> {
     private T root;
     private final Map<T, TreeNode<T>> treeNodes;
+    private final List<T> treeNodesIndices;
     private final Map<T, TreeNode<T>> parentNodes;
 
     /**
@@ -23,9 +25,11 @@ public class TreeADT<T> implements Iterable<T> {
     public TreeADT(T root) {
         this.root = root;
         treeNodes = new HashMap<>();
+        treeNodesIndices = new ArrayList<>();
         parentNodes = new HashMap<>();
 
         treeNodes.put(root, new TreeNode<>(root));
+        treeNodesIndices.add(root);
     }
 
     /**
@@ -81,6 +85,14 @@ public class TreeADT<T> implements Iterable<T> {
             treeNodes.put(parentVal, parent);
         }
 
+        if (!treeNodesIndices.contains(parentVal)) {
+            treeNodesIndices.add(parentVal);
+        }
+
+        if (!treeNodesIndices.contains(childVal)) {
+            treeNodesIndices.add(childVal);
+        }
+
         parent.append(child);
         parentNodes.put(childVal, parent);
     }
@@ -119,9 +131,11 @@ public class TreeADT<T> implements Iterable<T> {
     public void deleteTree(T newRoot) {
         this.root = newRoot;
         treeNodes.clear();
+        treeNodesIndices.clear();
         parentNodes.clear();
 
         treeNodes.put(root, new TreeNode<>(root));
+        treeNodesIndices.add(root);
     }
 
     /**
@@ -131,17 +145,73 @@ public class TreeADT<T> implements Iterable<T> {
      * @param   root   the root of the subtree to be returned.
      * @return  the hash map containing all the nodes in the subtree with root {@code root}.
      */
-    public HashMap<T, ArrayList<T>> getSubtree(T root) {
+    public TreeADT<T> getSubtree(T root) {
         if (!treeNodes.containsKey(root)) {
             throw new NoSuchElementException("The node is not in the tree.");
         }
 
-        HashMap<T, ArrayList<T>> subtree = new HashMap<>();
+        TreeADT<T> newTree = new TreeADT<>(root);
         for (TreeNode<T> node : treeNodes.get(root)) {
-            subtree.put(node.getVal(), node.getSubtreesValues());
+            TreeNode<T> parentNode = node.getParent();
+
+            if (!node.getVal().equals(root)) {
+                newTree.append(parentNode.getVal(), node.getVal());
+            }
         }
 
-        return subtree;
+        return newTree;
+    }
+
+    /**
+     * Does depth-first or breadth-first traversal of the rooted tree in the {@code TreeADT}
+     * and performs the given action for each node in the tree until all nodes have been processed,
+     * or the action throws an exception.
+     *
+     * @param  iteratorType   a type of an iterator that must be either 0 or 1,
+     *                        0 for a depth-first iterator, 1 for a breadth-first iterator.
+     * @param  action         an action to be performed on each node in the rooted tree.
+     */
+    public void forEach(int iteratorType, Consumer<? super T> action) {
+        Objects.requireNonNull(action);
+        if (iteratorType == 0) {
+            for (T t : this) {
+                action.accept(t);
+            }
+        } else if (iteratorType == 1) {
+            Iterator<T> breadthFirstIterator = this.BreadthFirstIterator();
+            while (breadthFirstIterator.hasNext()) {
+                action.accept(breadthFirstIterator.next());
+            }
+        } else {
+            throw new IllegalArgumentException("The iteratorType argument must be either 0 or 1.");
+        }
+    }
+
+    /**
+     * Does depth-first or breadth-first traversal of the tree with a root {@code root} in the {@code TreeADT}
+     * and performs the given action for each node in the tree until all nodes have been processed,
+     * or the action throws an exception.
+     *
+     * @param  iteratorType   a type of an iterator that must be either 0 or 1,
+     *                        0 for a depth-first iterator, 1 for a breadth-first iterator.
+     * @param  root           a root of the tree in the {@code TreeADT}.
+     * @param  action         an action to be performed on each node in the tree with a root {@code root}.
+     */
+    public void forEach(int iteratorType, T root, Consumer<? super T> action) {
+        Objects.requireNonNull(action);
+        if (iteratorType == 0) {
+            Iterator<T> depthFirstIterator = this.BreadthFirstIterator(root);
+            while (depthFirstIterator.hasNext()) {
+                action.accept(depthFirstIterator.next());
+            }
+        } else if (iteratorType == 1) {
+            Iterator<T> breadthFirstIterator = this.BreadthFirstIterator(root);
+            while (breadthFirstIterator.hasNext()) {
+                action.accept(breadthFirstIterator.next());
+            }
+        } else {
+            throw new IllegalArgumentException("The iteratorType argument must be either 0 or 1.");
+        }
     }
 
     /**
@@ -184,6 +254,27 @@ public class TreeADT<T> implements Iterable<T> {
         return new BreadthFirstIterator(root);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+
+        //noinspection unchecked
+        final TreeADT<T> anotherTree = (TreeADT<T>) obj;
+        List<T> anotherTreeNodesIndices = anotherTree.getTreeNodesIndices();
+
+        for (int i = 0; i < treeNodesIndices.size(); i++) {
+            if (i > anotherTreeNodesIndices.size()
+                    || !treeNodesIndices.get(i).equals(anotherTreeNodesIndices.get(i))) {
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private void unlinkParent(T child) {
         parentNodes.get(child).removeSubtree(treeNodes.get(child));
         parentNodes.remove(child);
@@ -192,8 +283,13 @@ public class TreeADT<T> implements Iterable<T> {
     private void traverseAndDelete(TreeNode<T> root) {
         for (TreeNode<T> node : root) {
             treeNodes.remove(node.getVal());
+            treeNodesIndices.remove(node.getVal());
             parentNodes.remove(node.getVal());
         }
+    }
+
+    private List<T> getTreeNodesIndices() {
+        return new ArrayList<>(treeNodesIndices);
     }
 
     private class DepthFirstIterator implements Iterator<T> {

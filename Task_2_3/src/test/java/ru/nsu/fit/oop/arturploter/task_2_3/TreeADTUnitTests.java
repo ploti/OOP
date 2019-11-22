@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -14,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class TreeADTUnitTests {
 
     @Nested
-    class AppendRemoveDepthFirstIteratorAndBreadthFirstIteratorTests {
+    class AppendRemoveDepthFirstSearchBreadthFirstSearchAndForEachTests {
         private final TreeADT<String> tree = new TreeADT<>("n1");
         private List<String> actual;
         Iterator<String> depthFirstIterator;
@@ -38,20 +36,17 @@ class TreeADTUnitTests {
             tree.append("n1", "n2");
             tree.append("n8", "n2");
 
-            tree.forEach(actual::add);
+            tree.forEach(0, actual::add);
             assertEquals(actual, new ArrayList<>(
                     Arrays.asList("n1", "n3", "n4", "n7", "n9", "n8", "n2", "n5", "n6")));
 
             actual.clear();
 
-            Iterator<String> breadthFirstIterator = tree.BreadthFirstIterator();
-            while (breadthFirstIterator.hasNext()) {
-                actual.add(breadthFirstIterator.next());
-            }
+            tree.forEach(1, actual::add);
         }
 
         @Test
-        void appendRemoveIteratorDepthFirstIteratorAndBreadthFirstIterator1() {
+        void appendRemoveIteratorForEachAndBreadthFirstIterator() {
             tree.append("n1", "n3");
             tree.append("n2", "n5");
             tree.append("n2", "n6");
@@ -90,10 +85,7 @@ class TreeADTUnitTests {
 
             actual.clear();
 
-            depthFirstIterator = tree.DepthFirstIterator("n7");
-            while (depthFirstIterator.hasNext()) {
-                actual.add(depthFirstIterator.next());
-            }
+            tree.forEach(0, "n7", actual::add);
 
             assertEquals(actual, new ArrayList<>(
                     Arrays.asList("n7", "n3")));
@@ -150,7 +142,7 @@ class TreeADTUnitTests {
         }
 
         @Test
-        void appendRemoveIteratorDepthFirstIteratorAndBreadthFirstIterator2() {
+        void appendRemoveIteratorDepthFirstIteratorAndBreadthFirstIterator() {
             tree.append("n1", "n3");
             tree.append("n2", "n5");
             tree.append("n2", "n6");
@@ -266,97 +258,69 @@ class TreeADTUnitTests {
     @Nested
     class DeleteTreeAndGetSubtreeTests {
         private final TreeADT<Double> tree = new TreeADT<>(902.2);
+        private final List<Double> nodes = new ArrayList<>(
+                Arrays.asList(902.2, 1.2, 17.5, 5.5, 91.8, -21.8, 100.005, 251.1, 71.2, 123.2, 1041.2, 152.5, 63.2));
 
         @Test
         void deleteTreeAndGetSubtree1() {
-            tree.append(902.2, 1.2);
-            tree.append(17.5, 5.5);
-            tree.append(91.8, -21.8);
-            tree.append(902.2, 91.8);
-            tree.append(1.2, 17.5);
+            tree.append(nodes.get(0), nodes.get(1));
+            tree.append(nodes.get(2), nodes.get(3));
+            tree.append(nodes.get(4), nodes.get(5));
+            tree.append(nodes.get(0), nodes.get(4));
+            tree.append(nodes.get(1), nodes.get(2));
 
-            //noinspection unchecked
-            assertEquals(tree.getSubtree(902.2), Stream.of(new Object[][] {
-                    { 902.2, new ArrayList<>(
-                            Arrays.asList(1.2, 91.8)) },
-                    { 17.5, new ArrayList<>(
-                            Collections.singletonList(5.5)) },
-                    { 91.8, new ArrayList<>(
-                            Collections.singletonList(-21.8)) },
-                    { 1.2, new ArrayList<>(
-                            Collections.singletonList(17.5)) },
-                    { 5.5, new ArrayList<>() },
-                    { -21.8, new ArrayList<>() }
-            }).collect(Collectors.toMap(data -> (Double) data[0], data -> (ArrayList<Double>) data[1])));
+            TreeADT<Double> expectedTree = new TreeADT<>(nodes.get(0));
+            expectedTree.append(nodes.get(0), nodes.get(1));
+            expectedTree.append(nodes.get(2), nodes.get(3));
+            expectedTree.append(nodes.get(4), nodes.get(5));
+            expectedTree.append(nodes.get(0), nodes.get(4));
+            expectedTree.append(nodes.get(1), nodes.get(2));
 
-            // Map initialization using Java 9 new Map.of() methods.
-            // Heard that you use JDK 8 to grade assignments, so it might not work due to your IDEA configuration
-//            assertEquals(tree.getSubtree(100.005), Map.ofEntries(
-//                    new AbstractMap.SimpleEntry<>(902.2, new ArrayList<>(
-//                            Arrays.asList(1.2, 91.8))),
-//                    new AbstractMap.SimpleEntry<>(17.5, new ArrayList<>(
-//                            Collections.singletonList(5.5))),
-//                    new AbstractMap.SimpleEntry<>(91.8, new ArrayList<>(
-//                            Collections.singletonList(-21.8))),
-//                    new AbstractMap.SimpleEntry<>(1.2, new ArrayList<>(
-//                            Collections.singletonList(17.5))),
-//                    new AbstractMap.SimpleEntry<>(5.5, new ArrayList<>()),
-//                    new AbstractMap.SimpleEntry<>(-21.8, new ArrayList<>())
-//                    ));
+            assertEquals(tree.getSubtree(nodes.get(0)), expectedTree);
 
-            tree.deleteTree(100.005);
-            tree.append(100.005, 902.2);
+            tree.deleteTree(nodes.get(6));
+            tree.append(nodes.get(6), nodes.get(0));
 
-            //noinspection unchecked
-            assertEquals(tree.getSubtree(100.005), Stream.of(new Object[][] {
-                    { 100.005, new ArrayList<>(
-                            Collections.singletonList(902.2)) },
-                    { 902.2, new ArrayList<>() }
-            }).collect(Collectors.toMap(data -> (Double) data[0], data -> (ArrayList<Double>) data[1])));
+            expectedTree = new TreeADT<>(nodes.get(6));
+            expectedTree.append(nodes.get(6), nodes.get(0));
+
+            assertEquals(tree.getSubtree(nodes.get(6)), expectedTree);
         }
 
         @Test
         void deleteTreeAndGetSubtree2() {
-            tree.append(251.1, 71.2);
-            tree.append(123.2, 1041.2);
-            tree.append(123.2, 251.1);
-            tree.append(71.2, 1041.2);
-            tree.append(123.2, 152.5);
+            tree.append(nodes.get(7), nodes.get(8));
+            tree.append(nodes.get(9), nodes.get(10));
+            tree.append(nodes.get(9), nodes.get(7));
+            tree.append(nodes.get(8),nodes.get(10));
+            tree.append(nodes.get(9), nodes.get(11));
 
-            tree.remove(71.2);
+            tree.remove(nodes.get(8));
 
-            tree.append(251.1, 123.2);
-            tree.append(152.5, 251.1);
-            tree.append(63.2, 71.2);
-            tree.append(100.005, 152.5);
+            tree.append(nodes.get(7), nodes.get(9));
+            tree.append(nodes.get(11), nodes.get(7));
+            tree.append(nodes.get(12), nodes.get(8));
+            tree.append(nodes.get(6), nodes.get(11));
 
-            //noinspection unchecked
-            assertEquals(tree.getSubtree(100.005), Stream.of(new Object[][] {
-                    { 152.5, new ArrayList<>(
-                            Collections.singletonList(251.1)) },
-                    { 123.2, new ArrayList<>() },
-                    { 100.005, new ArrayList<>(
-                            Collections.singletonList(152.5)) },
-                    { 251.1, new ArrayList<>(
-                            Collections.singletonList(123.2)) }
-            }).collect(Collectors.toMap(data -> (Double) data[0], data -> (ArrayList<Double>) data[1])));
+            TreeADT<Double> expectedTree = new TreeADT<>(nodes.get(6));
+            expectedTree.append(nodes.get(11),nodes.get(7));
+            expectedTree.append(nodes.get(6), nodes.get(11));
+            expectedTree.append(nodes.get(7), nodes.get(9));
 
-            //noinspection unchecked
-            assertEquals(tree.getSubtree(63.2), Stream.of(new Object[][] {
-                    { 63.2, new ArrayList<>(
-                            Collections.singletonList(71.2)) },
-                    { 71.2, new ArrayList<>() }
-            }).collect(Collectors.toMap(data -> (Double) data[0], data -> (ArrayList<Double>) data[1])));
+            assertEquals(tree.getSubtree(nodes.get(6)), expectedTree);
 
-            tree.deleteTree(100.005);
-            tree.append(100.005, 902.2);
+            expectedTree = new TreeADT<>(nodes.get(12));
+            expectedTree.append(nodes.get(12), nodes.get(8));
 
-            //noinspection unchecked
-            assertEquals(tree.getSubtree(100.005), Stream.of(new Object[][] {
-                    { 100.005, new ArrayList<>(
-                            Collections.singletonList(902.2)) },
-                    { 902.2, new ArrayList<>() }
-            }).collect(Collectors.toMap(data -> (Double) data[0], data -> (ArrayList<Double>) data[1])));
+            assertEquals(tree.getSubtree(nodes.get(12)), expectedTree);
+
+            tree.deleteTree(nodes.get(7));
+            tree.append(nodes.get(7), nodes.get(0));
+
+            expectedTree = new TreeADT<>(nodes.get(7));
+            expectedTree.append(nodes.get(7), nodes.get(0));
+
+            assertEquals(tree.getSubtree(nodes.get(7)), expectedTree);
         }
 
         @Nested
