@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class PrefixCalculatorUnitTests {
     private static final InputStream systemInBackup = System.in;
     private static final PrintStream systemOutBackup = System.out;
+    private final PrefixCalculator calculator = new PrefixCalculator();
 
     @AfterAll
     static void restoreStreams() {
@@ -47,7 +48,7 @@ class PrefixCalculatorUnitTests {
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
                 System.setOut(new PrintStream(byteArrayOutputStream));
 
-                PrefixCalculator.start();
+                calculator.start();
 
                 assertEquals(outputString, byteArrayOutputStream.toString());
             }
@@ -66,7 +67,7 @@ class PrefixCalculatorUnitTests {
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
                 System.setOut(new PrintStream(byteArrayOutputStream));
 
-                PrefixCalculator.start();
+                calculator.start();
 
                 assertEquals(outputString, byteArrayOutputStream.toString());
             }
@@ -85,7 +86,7 @@ class PrefixCalculatorUnitTests {
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
                 System.setOut(new PrintStream(byteArrayOutputStream));
 
-                PrefixCalculator.start();
+                calculator.start();
 
                 assertEquals(outputString, byteArrayOutputStream.toString());
             }
@@ -107,7 +108,7 @@ class PrefixCalculatorUnitTests {
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
                 System.setOut(new PrintStream(byteArrayOutputStream));
 
-                PrefixCalculator.start();
+                calculator.start();
 
                 assertEquals(outputString, byteArrayOutputStream.toString());
             }
@@ -127,7 +128,7 @@ class PrefixCalculatorUnitTests {
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
                 System.setOut(new PrintStream(byteArrayOutputStream));
 
-                PrefixCalculator.start();
+                calculator.start();
 
                 assertEquals(outputString, byteArrayOutputStream.toString());
             }
@@ -145,7 +146,7 @@ class PrefixCalculatorUnitTests {
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
                 System.setOut(new PrintStream(byteArrayOutputStream));
 
-                PrefixCalculator.start();
+                calculator.start();
 
                 assertEquals(outputString, byteArrayOutputStream.toString());
             }
@@ -162,7 +163,7 @@ class PrefixCalculatorUnitTests {
 
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
 
-                Exception exception = assertThrows(IllegalArgumentException.class, PrefixCalculator::start);
+                Exception exception = assertThrows(IllegalArgumentException.class, calculator::start);
                 assertEquals("Cannot divide by zero.", exception.getMessage());
             }
 
@@ -173,7 +174,7 @@ class PrefixCalculatorUnitTests {
 
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
 
-                Exception exception = assertThrows(IllegalArgumentException.class, PrefixCalculator::start);
+                Exception exception = assertThrows(IllegalArgumentException.class, calculator::start);
                 assertEquals("The logarithm of 0 with a base 0 is undefined.", exception.getMessage());
             }
 
@@ -184,7 +185,7 @@ class PrefixCalculatorUnitTests {
 
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
 
-                Exception exception = assertThrows(IllegalArgumentException.class, PrefixCalculator::start);
+                Exception exception = assertThrows(IllegalArgumentException.class, calculator::start);
                 assertEquals("The logarithm of 12.0 with a base 1 is undefined.", exception.getMessage());
             }
 
@@ -195,7 +196,7 @@ class PrefixCalculatorUnitTests {
 
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
 
-                Exception exception = assertThrows(IllegalArgumentException.class, PrefixCalculator::start);
+                Exception exception = assertThrows(IllegalArgumentException.class, calculator::start);
                 assertEquals(
                         "The base of a logarithm must be a positive real number.", exception.getMessage());
             }
@@ -207,7 +208,7 @@ class PrefixCalculatorUnitTests {
 
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
 
-                Exception exception = assertThrows(IllegalArgumentException.class, PrefixCalculator::start);
+                Exception exception = assertThrows(IllegalArgumentException.class, calculator::start);
                 assertEquals("The logarithm of a negative number with a base 6.0 is undefined.",
                         exception.getMessage());
             }
@@ -219,7 +220,7 @@ class PrefixCalculatorUnitTests {
 
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
 
-                Exception exception = assertThrows(IllegalArgumentException.class, PrefixCalculator::start);
+                Exception exception = assertThrows(IllegalArgumentException.class, calculator::start);
                 assertEquals(
                         "The square root of a negative number does not exist among the set of Real Numbers.",
                         exception.getMessage());
@@ -232,7 +233,7 @@ class PrefixCalculatorUnitTests {
 
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
 
-                Exception exception = assertThrows(IllegalArgumentException.class, PrefixCalculator::start);
+                Exception exception = assertThrows(IllegalArgumentException.class, calculator::start);
                 assertEquals("The prefix expression does not have enough operands.", exception.getMessage());
             }
 
@@ -243,7 +244,7 @@ class PrefixCalculatorUnitTests {
 
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
 
-                Exception exception = assertThrows(IllegalArgumentException.class, PrefixCalculator::start);
+                Exception exception = assertThrows(IllegalArgumentException.class, calculator::start);
                 assertEquals("The prefix expression has too many tokens.", exception.getMessage());
             }
 
@@ -254,7 +255,7 @@ class PrefixCalculatorUnitTests {
 
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
 
-                Exception exception = assertThrows(IllegalArgumentException.class, PrefixCalculator::start);
+                Exception exception = assertThrows(IllegalArgumentException.class, calculator::start);
                 assertEquals("The prefix expression does not have enough operands.", exception.getMessage());
             }
 
@@ -265,7 +266,7 @@ class PrefixCalculatorUnitTests {
 
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
 
-                Exception exception = assertThrows(IllegalArgumentException.class, PrefixCalculator::start);
+                Exception exception = assertThrows(IllegalArgumentException.class, calculator::start);
                 assertEquals("The prefix expression cannot start with a number.", exception.getMessage());
             }
 
@@ -276,7 +277,7 @@ class PrefixCalculatorUnitTests {
 
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
 
-                Exception exception = assertThrows(IllegalArgumentException.class, PrefixCalculator::start);
+                Exception exception = assertThrows(IllegalArgumentException.class, calculator::start);
                 assertEquals("The prefix expression has too many tokens.", exception.getMessage());
             }
 
@@ -287,14 +288,14 @@ class PrefixCalculatorUnitTests {
 
                 System.setIn(new ByteArrayInputStream(inputString.getBytes()));
 
-                Exception exception = assertThrows(IllegalArgumentException.class, PrefixCalculator::start);
+                Exception exception = assertThrows(IllegalArgumentException.class, calculator::start);
                 assertEquals("The prefix expression has too many tokens.", exception.getMessage());
             }
         }
     }
 
     @Nested
-    @DisplayName("Tests for the calculate method")
+    @DisplayName("Tests for the evaluate method")
     class CalculateTests {
         private final PrefixCalculator calculator = new PrefixCalculator();
 
