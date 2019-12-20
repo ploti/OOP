@@ -1,6 +1,6 @@
 package ru.nsu.fit.oop.arturploter.task_3_1;
 
-class DateDifference {
+public class DateDifference {
     private final int year;
     private final int month;
     private final int day;
