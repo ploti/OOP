@@ -12,6 +12,8 @@ import java.util.function.Consumer;
  * @param   <T>   the generic type of an object in the tree.
  */
 public class TreeADT<T> implements Iterable<T> {
+    private transient int modCount = 0;
+
     private T root;
     private final Map<T, TreeNode<T>> treeNodes;
     private final List<T> treeNodesIndices;
@@ -95,6 +97,8 @@ public class TreeADT<T> implements Iterable<T> {
 
         parent.append(child);
         parentNodes.put(childVal, parent);
+
+        modCount++;
     }
 
     /**
@@ -121,6 +125,8 @@ public class TreeADT<T> implements Iterable<T> {
         }
 
         traverseAndDelete(treeNodes.get(node));
+
+        modCount++;
     }
 
     /**
@@ -136,6 +142,8 @@ public class TreeADT<T> implements Iterable<T> {
 
         treeNodes.put(root, new TreeNode<>(root));
         treeNodesIndices.add(root);
+
+        modCount++;
     }
 
     /**
@@ -199,18 +207,24 @@ public class TreeADT<T> implements Iterable<T> {
      */
     public void forEach(int iteratorType, T root, Consumer<? super T> action) {
         Objects.requireNonNull(action);
+        final int expectedModCount = modCount;
+
         if (iteratorType == 0) {
             Iterator<T> depthFirstIterator = this.BreadthFirstIterator(root);
-            while (depthFirstIterator.hasNext()) {
+            while (depthFirstIterator.hasNext() && modCount == expectedModCount) {
                 action.accept(depthFirstIterator.next());
             }
         } else if (iteratorType == 1) {
             Iterator<T> breadthFirstIterator = this.BreadthFirstIterator(root);
-            while (breadthFirstIterator.hasNext()) {
+            while (breadthFirstIterator.hasNext() && modCount == expectedModCount) {
                 action.accept(breadthFirstIterator.next());
             }
         } else {
             throw new IllegalArgumentException("The iteratorType argument must be either 0 or 1.");
+        }
+
+        if (modCount != expectedModCount) {
+            throw new ConcurrentModificationException();
         }
     }
 
@@ -254,13 +268,19 @@ public class TreeADT<T> implements Iterable<T> {
         return new BreadthFirstIterator(root);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
         if (getClass() != obj.getClass()) {
             return false;
         }
 
-        //noinspection unchecked
+        final int expectedModCount = modCount;
+
         final TreeADT<T> anotherTree = (TreeADT<T>) obj;
         List<T> anotherTreeNodesIndices = anotherTree.getTreeNodesIndices();
 
@@ -268,11 +288,21 @@ public class TreeADT<T> implements Iterable<T> {
             if (i > anotherTreeNodesIndices.size()
                     || !treeNodesIndices.get(i).equals(anotherTreeNodesIndices.get(i))) {
 
+                checkForComodification(expectedModCount);
+
                 return false;
             }
         }
 
+        checkForComodification(expectedModCount);
+
         return true;
+    }
+
+    private void checkForComodification(final int expectedModCount) {
+        if (modCount != expectedModCount) {
+            throw new ConcurrentModificationException();
+        }
     }
 
     private void unlinkParent(T child) {
@@ -297,6 +327,7 @@ public class TreeADT<T> implements Iterable<T> {
         private final Set<T> visited;
         private T nextNode;
         private final Map<T, Iterator<T>> iterators;
+        private final int expectedModCount;
 
         DepthFirstIterator(T root) {
             stack = new Stack<>();
@@ -306,6 +337,8 @@ public class TreeADT<T> implements Iterable<T> {
 
             stack.push(root);
             visited.add(root);
+
+            expectedModCount = modCount;
         }
 
         @Override
@@ -323,6 +356,7 @@ public class TreeADT<T> implements Iterable<T> {
                 visited.add(nextNode);
                 return nextNode;
             } finally {
+                checkForComodification();
                 proceed();
             }
         }
@@ -360,11 +394,18 @@ public class TreeADT<T> implements Iterable<T> {
 
             stack.push(nextNode);
         }
+
+        final void checkForComodification() {
+            if (modCount != expectedModCount) {
+                throw new ConcurrentModificationException();
+            }
+        }
     }
 
     private class BreadthFirstIterator implements Iterator<T> {
         private final Queue<T> queue;
         private final Set<T> visited;
+        private final int expectedModCount;
 
         BreadthFirstIterator(T root) {
             queue = new LinkedList<>();
@@ -372,6 +413,8 @@ public class TreeADT<T> implements Iterable<T> {
 
             queue.add(root);
             visited.add(root);
+
+            expectedModCount = modCount;
         }
 
         @Override
@@ -395,12 +438,20 @@ public class TreeADT<T> implements Iterable<T> {
                 }
             }
 
+            checkForComodification();
+
             return treeNode;
         }
 
         @Override
         public void remove() {
             throw new UnsupportedOperationException("The remove operation is not supported.");
+        }
+
+        final void checkForComodification() {
+            if (modCount != expectedModCount) {
+                throw new ConcurrentModificationException();
+            }
         }
     }
 }

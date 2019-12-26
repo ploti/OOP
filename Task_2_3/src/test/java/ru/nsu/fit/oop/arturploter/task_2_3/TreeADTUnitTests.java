@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -330,7 +331,8 @@ class TreeADTUnitTests {
 
             @Test
             void append_NullWasPassedIntoAppend_IllegalArgumentExceptionIsThrown() {
-                assertThrows(IllegalArgumentException.class, () -> tree.append(null, new Integer[] { 2, 0, 0, 1 }));
+                assertThrows(IllegalArgumentException.class,
+                        () -> tree.append(null, new Integer[] { 2, 0, 0, 1 }));
             }
 
             @Test
@@ -442,6 +444,58 @@ class TreeADTUnitTests {
                     }
                 });
             }
+        }
+    }
+
+    @Nested
+    class ConcurrentmodificationexceptionTests {
+        private final TreeADT<Integer> tree = new TreeADT<>(0);
+
+        @BeforeEach
+        void initTree() {
+            for (int i = 0; i < 255; i++) {
+                tree.append(i, i + 1);
+            }
+        }
+
+        @Test
+        void collectionIsModifiedDuringIteration_ConcurrentModificationExceptionIsThrown() {
+            assertThrows(ConcurrentModificationException.class, () -> {
+                for (Integer node : tree) {
+                    if (node.equals(25)) {
+                        tree.remove(25);
+                    }
+                }
+            });
+        }
+
+        @Test
+        void collectionIsModifiedDuringIterationByAnotherThread_ConcurrentModificationExceptionIsThrown() {
+            final CountDownLatch readLatch = new CountDownLatch(1);
+            final CountDownLatch writeLatch = new CountDownLatch(1);
+
+            new Thread(() -> assertThrows(ConcurrentModificationException.class, () -> {
+                for (Integer node : tree) {
+                    if (node.equals(25)) {
+                        try {
+                            writeLatch.countDown();
+                            readLatch.await();
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                }
+            })).start();
+
+            new Thread(() -> {
+                try {
+                    writeLatch.await();
+                    tree.append(125, 126);
+                    readLatch.countDown();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }).start();
         }
     }
 }
