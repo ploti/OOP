@@ -10,7 +10,7 @@ package ru.nsu.fit.oop.arturploter.task_3_1;
  *
  * @author  Artur Ploter
  */
-interface MyCalendar {
+public interface MyCalendar {
 
     /**
      * Adds days to the current date.
@@ -27,10 +27,10 @@ interface MyCalendar {
     void subtractDays(int days);
 
     /**
-     * Returns the {@code GregorianDate} object that represents the date {@code days} days after the current date.
+     * Returns the object that represents the date {@code days} days after the current date.
      *
      * @param   days   the number of days to be added to the current date to get the new date
-     * @return  the {@code GregorianDate} object that represents the date {@code days} days after the current date
+     * @return  the object that represents the date {@code days} days after the current date
      */
     MyDate getDateInXDays(int days);
 
@@ -64,7 +64,7 @@ interface MyCalendar {
      * @param   date   the start date
      * @return  the {@code DateDifference} object that represents the number of years, months, days
      */
-    DateDifference getYearsMonthsDaysPassedSince(GregorianDate date);
+    DateDifference getYearsMonthsDaysPassedSince(MyDate date);
 
     /**
      * Returns the number of days until New Year's Day.
@@ -82,30 +82,30 @@ interface MyCalendar {
     long getDaysUntilNewYearsEve(int year);
 
     /**
-     * Returns the {@code GregorianDate} object that represents the date of the next Friday the 13th.
+     * Returns the object that represents the date of the next Friday the 13th.
      *
      * @return  the date of the next Friday the 13th.
      */
-    GregorianDate getNextFridayThe13th();
+    MyDate getNextFridayThe13th();
 
     /**
-     * Returns the {@code GregorianDate} object that represents the current date.
+     * Returns the object that represents the current date.
      *
      * @return  the current date
      */
-    GregorianDate getDate();
+    MyDate getDate();
 
     /**
-     * Returns the {@code GregorianDate} object that represents the date of birth set by the user.
+     * Returns the object that represents the date of birth set by the user.
      *
      * @return  the date that represents the date of birth
      */
-    GregorianDate getDateOfBirth();
+    MyDate getDateOfBirth();
 
     /**
      * Sets the date of birth.
      *
      * @param  dateOfBirth   the date of birth to be set
      */
-    void setDateOfBirth(GregorianDate dateOfBirth);
+    void setDateOfBirth(MyDate dateOfBirth);
 }

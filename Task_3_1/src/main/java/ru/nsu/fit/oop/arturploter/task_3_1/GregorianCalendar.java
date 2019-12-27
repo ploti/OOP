@@ -95,7 +95,7 @@ public class GregorianCalendar implements MyCalendar {
     }
 
     @Override
-    public DateDifference getYearsMonthsDaysPassedSince(GregorianDate date) {
+    public DateDifference getYearsMonthsDaysPassedSince(MyDate date) {
         if (this.date.compareTo(date) < 0) {
             throw new IllegalArgumentException("date must be less than or equal to the current date.");
         }
@@ -188,7 +188,7 @@ public class GregorianCalendar implements MyCalendar {
     }
 
     @Override
-    public void setDateOfBirth(GregorianDate dateOfBirth) {
+    public void setDateOfBirth(MyDate dateOfBirth) {
         if (date.compareTo(
                 new GregorianDate(dateOfBirth.getDay(), dateOfBirth.getMonth(), dateOfBirth.getYear() + 100)) >= 0
                 || date.compareTo(new GregorianDate(
@@ -197,7 +197,7 @@ public class GregorianCalendar implements MyCalendar {
             throw new IllegalArgumentException("Invalid date.");
         }
 
-        this.dateOfBirth = dateOfBirth;
+        this.dateOfBirth = (GregorianDate) dateOfBirth;
     }
 
     private void addDays(GregorianDate date, int days) {

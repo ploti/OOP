@@ -5,7 +5,7 @@ public class DateDifference {
     private final int month;
     private final int day;
 
-    DateDifference(int year, int month, int day) {
+    public DateDifference(int year, int month, int day) {
         this.year = year;
         this.month = month;
         this.day = day;

@@ -1,11 +1,11 @@
 package ru.nsu.fit.oop.arturploter.task_3_1;
 
-abstract class MyDate implements Comparable<MyDate> {
-    int day;
-    int month;
-    int year;
+public abstract class MyDate implements Comparable<MyDate> {
+    protected int day;
+    protected int month;
+    protected int year;
 
-    MyDate(int day, int month, int year) {
+    protected MyDate(int day, int month, int year) {
         if (!validateDate(day, month, year)) {
             throw new IllegalArgumentException("Invalid date.");
         }
@@ -15,7 +15,7 @@ abstract class MyDate implements Comparable<MyDate> {
         this.year = year;
     }
 
-    MyDate(MyDate date) {
+    protected MyDate(MyDate date) {
         day = date.getDay();
         month = date.getMonth();
         year = date.getYear();
@@ -28,7 +28,7 @@ abstract class MyDate implements Comparable<MyDate> {
      */
     abstract public int getDayOfTheWeek();
 
-    abstract boolean validateDate(int date, int month, int year);
+    abstract protected boolean validateDate(int date, int month, int year);
 
     /**
      * Returns the day of the date.
@@ -39,7 +39,7 @@ abstract class MyDate implements Comparable<MyDate> {
         return day;
     }
 
-    void setDay(int day) {
+    public void setDay(int day) {
         this.day = day;
     }
 
@@ -52,7 +52,7 @@ abstract class MyDate implements Comparable<MyDate> {
         return month;
     }
 
-    void setMonth(int month) {
+    public void setMonth(int month) {
         this.month = month;
     }
 
@@ -65,7 +65,7 @@ abstract class MyDate implements Comparable<MyDate> {
         return year;
     }
 
-    void setYear(int year) {
+    public void setYear(int year) {
         this.year = year;
     }
 

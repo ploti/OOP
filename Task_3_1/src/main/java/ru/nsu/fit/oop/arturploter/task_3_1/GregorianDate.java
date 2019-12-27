@@ -22,7 +22,7 @@ public class GregorianDate extends MyDate {
     }
 
     @Override
-    boolean validateDate(int day, int month, int year) {
+    protected boolean validateDate(int day, int month, int year) {
         final int LEAP_STEP = 4;
 
         if (!((day >= 1) && (month >= 1 && month <= 12) && (year >= 0))) {
