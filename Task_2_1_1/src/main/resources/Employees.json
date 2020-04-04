@@ -1,0 +1,38 @@
+{
+  "pizzaChefs": [
+    {
+      "id": "1",
+      "cookingTime": "10000"
+    },
+    {
+      "id": "2",
+      "cookingTime": "10000"
+    },
+    {
+      "id": "3",
+      "cookingTime": "10000"
+    }
+  ],
+  "deliveryWorkers": [
+    {
+      "id": "1",
+      "deliveryTime": "5000",
+      "howManyPizzasCanCarry": "3"
+    },
+    {
+      "id": "2",
+      "deliveryTime": "6000",
+      "howManyPizzasCanCarry": "2"
+    },
+    {
+      "id": "3",
+      "deliveryTime": "4000",
+      "howManyPizzasCanCarry": "1"
+    },
+    {
+      "id": "4",
+      "deliveryTime": "5000",
+      "howManyPizzasCanCarry": "4"
+    }
+  ]
+}
