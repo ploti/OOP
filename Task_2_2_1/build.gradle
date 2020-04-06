@@ -7,7 +7,7 @@ plugins {
 group 'ru.nsu.fit.oop.arturploter.task_2_2_1'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 11
+sourceCompatibility =  1.8
 
 repositories {
     mavenCentral()
@@ -24,7 +24,7 @@ test {
 
 javafx {
     version = "13"
-    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing', 'javafx.media', 'javafx.graphics', 'javafx.base' ]
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.swing', 'javafx.media', 'javafx.graphics', 'javafx.base']
 }
 
 mainClassName = 'ru.nsu.fit.oop.arturploter.task_2_2_1.Main'

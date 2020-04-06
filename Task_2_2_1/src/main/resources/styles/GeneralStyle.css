@@ -1,0 +1,25 @@
+#background {
+    -fx-background-color: black;
+}
+
+.label {
+    -fx-text-fill: white;
+    -fx-font-size: 30px;
+    -fx-font-family: "Segoe UI Regular";
+    -fx-alignment: center;
+}
+
+.button {
+    -fx-font-family: "Segoe UI Regular";
+    -fx-font-size: 30px;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+.button:hover {
+    -fx-text-fill: red;
+}
+
+#inGameScoreLabel {
+    -fx-font-size: 15px;
+}
