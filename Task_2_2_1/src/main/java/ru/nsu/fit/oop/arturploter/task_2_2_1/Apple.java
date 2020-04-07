@@ -6,7 +6,7 @@ class Apple extends GameObject {
 
   static final Color FRUIT_COLOR = Color.rgb(255, 75, 40);
 
-  Apple(int x, int y) {
+  Apple(double x, double y) {
     super(x, y);
   }
 }

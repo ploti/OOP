@@ -10,7 +10,7 @@ class WhiteApple extends GameObject {
 
   static final int SUPER_STATE_TIME = 9000;
 
-  WhiteApple(int x, int y) {
+  WhiteApple(double x, double y) {
     super(x, y);
   }
 }

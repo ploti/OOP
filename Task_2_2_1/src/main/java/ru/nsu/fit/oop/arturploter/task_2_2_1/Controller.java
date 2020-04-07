@@ -3,6 +3,7 @@ package ru.nsu.fit.oop.arturploter.task_2_2_1;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 class Controller {
@@ -43,7 +44,7 @@ class Controller {
     pause = false;
     resume = false;
     start = false;
-    view = new GameView();
+    view = new GameView(new AnchorPane());
     snake = view.getSnake();
     head = snake.getHead();
     playfield = view.getPlayfield();

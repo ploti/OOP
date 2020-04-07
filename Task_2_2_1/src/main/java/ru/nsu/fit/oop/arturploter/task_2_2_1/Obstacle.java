@@ -8,7 +8,7 @@ class Obstacle extends GameObject {
 
   static final int OBSTACLES_START_NUMBER = 10;
 
-  Obstacle(int x, int y) {
+  Obstacle(double x, double y) {
     super(x, y);
   }
 }

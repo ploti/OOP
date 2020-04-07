@@ -2,29 +2,29 @@ package ru.nsu.fit.oop.arturploter.task_2_2_1;
 
 abstract class GameObject {
 
-  static final int SIZE = 20;
-  private int posX;
-  private int posY;
+  static final double SIZE = 20;
+  private double posX;
+  private double posY;
 
-  GameObject(int posX, int posY) {
+  GameObject(double posX, double posY) {
 
     this.posX = posX;
     this.posY = posY;
   }
 
-  int getPosX() {
+  double getPosX() {
     return posX;
   }
 
-  void setPosX(int posX) {
+  void setPosX(double posX) {
     this.posX = posX;
   }
 
-  int getPosY() {
+  double getPosY() {
     return posY;
   }
 
-  void setPosY(int posY) {
+  void setPosY(double posY) {
     this.posY = posY;
   }
 }

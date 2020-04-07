@@ -10,7 +10,7 @@ class BodyPart extends GameObject {
 
   static final Color HEAD_COLOR = Color.rgb(110, 145, 110);
 
-  BodyPart(int x, int y) {
+  BodyPart(double x, double y) {
     super(x, y);
   }
 }

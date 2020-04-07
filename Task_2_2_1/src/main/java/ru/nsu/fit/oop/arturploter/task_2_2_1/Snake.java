@@ -10,8 +10,8 @@ class Snake {
 
   private final ArrayList<BodyPart> body;
 
-  private final int headX = GameView.WIDTH / 2 + GameObject.SIZE / 2;
-  private final int headY = GameView.HEIGHT / 2 + GameObject.SIZE / 2;
+  private final double headX = GameView.WIDTH / 2 + GameObject.SIZE / 2;
+  private final double headY = GameView.HEIGHT / 2 + GameObject.SIZE / 2;
 
   private int size;
 
@@ -55,7 +55,7 @@ class Snake {
     return this.head;
   }
 
-  void addBodyPart(int x, int y) {
+  void addBodyPart(double x, double y) {
     body.add(new BodyPart(x, y));
     ++size;
   }

@@ -9,9 +9,9 @@ import javafx.util.Duration;
 
 class Playfield {
 
-  private static final int WIDTH = GameView.WIDTH / GameObject.SIZE;
+  private static final double WIDTH = GameView.WIDTH / GameObject.SIZE;
 
-  private static final int HEIGHT = GameView.HEIGHT / GameObject.SIZE;
+  private static final double HEIGHT = GameView.HEIGHT / GameObject.SIZE;
 
   private final Random random;
 
@@ -62,10 +62,10 @@ class Playfield {
   }
 
   State checkCollision() {
-    int headPosX;
-    int headPosY;
-    int tempPosX;
-    int tempPosY;
+    double headPosX;
+    double headPosY;
+    double tempPosX;
+    double tempPosY;
 
     headPosX = head.getPosX();
     headPosY = head.getPosY();
@@ -114,12 +114,12 @@ class Playfield {
 
   private void placeObstacles() {
 
-    int obstaclePosX = 0;
-    int obstaclePosY = 0;
-    int tempPosX;
-    int tempPosY;
-    int headX = snake.getHead().getPosX();
-    int headY = snake.getHead().getPosY();
+    double obstaclePosX = 0;
+    double obstaclePosY = 0;
+    double tempPosX;
+    double tempPosY;
+    double headX = snake.getHead().getPosX();
+    double headY = snake.getHead().getPosY();
 
     boolean collision = true;
     boolean tempSnake;
@@ -129,8 +129,8 @@ class Playfield {
 
       tempSnake = false;
       tempApple = false;
-      obstaclePosX = (random.nextInt(WIDTH) * GameObject.SIZE) + GameObject.SIZE / 2;
-      obstaclePosY = (random.nextInt(HEIGHT) * GameObject.SIZE) + GameObject.SIZE / 2;
+      obstaclePosX = (random.nextInt((int) WIDTH) * GameObject.SIZE) + GameObject.SIZE / 2;
+      obstaclePosY = (random.nextInt((int) HEIGHT) * GameObject.SIZE) + GameObject.SIZE / 2;
 
       for (int i = 0; i < snake.getSize(); ++i) {
 
@@ -192,13 +192,13 @@ class Playfield {
     addObstacle(obstaclePosX, obstaclePosY);
   }
 
-  private void addObstacle(int X, int Y) {
+  private void addObstacle(double X, double Y) {
     obstacles.add(new Obstacle(X, Y));
   }
 
   void checkEaten() {
 
-    int headX, headY, foodX, foodY;
+    double headX, headY, foodX, foodY;
     headX = head.getPosX();
     headY = head.getPosY();
 
@@ -244,8 +244,8 @@ class Playfield {
 
   void updateFruit() {
 
-    int foodX, foodY, sFoodX = -1, sFoodY = -1;
-    int[] place;
+    double foodX, foodY, sFoodX = -1, sFoodY = -1;
+    double[] place;
 
     if (apples.size() <= 0) {
 
@@ -266,19 +266,19 @@ class Playfield {
     }
   }
 
-  private int[] placeFruit() {
+  private double[] placeFruit() {
 
-    int[] point = new int[2];
+    double[] point = new double[2];
 
-    int helpX, helpY, foodX = 0, foodY = 0;
+    double helpX, helpY, foodX = 0, foodY = 0;
     boolean helpS, helpO;
     boolean collision = true;
 
     while (collision) {
 
       helpS = helpO = false;
-      foodX = (random.nextInt(WIDTH) * GameObject.SIZE) + GameObject.SIZE / 2;
-      foodY = (random.nextInt(HEIGHT) * GameObject.SIZE) + GameObject.SIZE / 2;
+      foodX = (random.nextInt((int) WIDTH) * GameObject.SIZE) + GameObject.SIZE / 2;
+      foodY = (random.nextInt((int) HEIGHT) * GameObject.SIZE) + GameObject.SIZE / 2;
 
       for (int i = 0; i < snake.getSize(); ++i) {
 
@@ -324,7 +324,7 @@ class Playfield {
     return point;
   }
 
-  private void addFruit(int foodX, int foodY, int sFoodX, int sFoodY) {
+  private void addFruit(double foodX, double foodY, double sFoodX, double sFoodY) {
 
     if (sFoodX != -1 && sFoodY != -1) {
       whiteApple = new WhiteApple(sFoodX, sFoodY);

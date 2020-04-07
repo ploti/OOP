@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'ru.nsu.fit.oop.arturploter.task_2_1_1'
+group 'org.example'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
@@ -12,20 +12,16 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
+
     compile(
             [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.4.1'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.4.1'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.4.1']
     )
-
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
 }
 
 test {
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
-
     useJUnitPlatform()
 }
