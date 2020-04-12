@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'application'
+}
+
+group 'ru.nsu.fit.oop.arturploter.task_2_2_1'
+version '1.0-SNAPSHOT'
+
+
+sourceCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
+    testCompile "org.testfx:testfx-core:4.0.16-alpha"
+    testCompile "org.testfx:testfx-junit5:4.0.16-alpha"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+javafx {
+    version = "13"
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.swing', 'javafx.media', 'javafx.graphics', 'javafx.base']
+}
+
+mainClassName = 'ru.nsu.fit.oop.arturploter.task_2_2_1.MainMenu'
