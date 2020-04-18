@@ -23,15 +23,14 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
- * The class represents the playfield. It encapsulates all the game logic and contains objects
- * that can be seen on the screen: obstacles, an apple, and a snake.
+ * The class represents the playfield. It encapsulates all the game logic and contains objects that
+ * can be seen on the screen: obstacles, an apple, and a snake.
  */
 class Playfield extends Scene {
   static final int PIXEL_SIZE = 25;
+  static final int WIDTH = 700;
+  static final int HEIGHT = 700;
   private static final int FOOD_POINT = 1;
-  private final int WIDTH = 800;
-  private final int HEIGHT = 800;
-
   private final GraphicsContext graphicsContext;
 
   private final Apple apple;
@@ -40,15 +39,21 @@ class Playfield extends Scene {
   private final GameTimer timer;
   private final EventHandler<KeyEvent> wasdEventHandler = new WASDEventHandler();
   private final boolean isGameOverMessage;
+  private SnakeAI snakeAI;
   private Snake snake;
+  private Snake enemySnake;
+  private boolean isEnemyDead;
   private int score;
+  private int enemyScore;
   private boolean isInGame;
   private boolean isPaused;
   private boolean isGameOver;
   private long time;
+  private int timesUpdated;
   private Label pauseLabel;
   private Label gameOverLabel;
   private Label scoreLabel;
+  private Label enemyScoreLabel;
   private Label inGameScoreLabel;
 
   Playfield(Parent root, long time) {
@@ -66,13 +71,14 @@ class Playfield extends Scene {
 
     apple = new Apple(PIXEL_SIZE, PIXEL_SIZE);
     obstacles = new ArrayList<>();
-    numOfObstacles = 30;
+    numOfObstacles = 140;
 
     isInGame = false;
     isPaused = false;
     isGameOver = false;
     isGameOverMessage = true;
     score = 0;
+    enemyScore = 0;
 
     timer = new GameTimer();
 
@@ -83,6 +89,7 @@ class Playfield extends Scene {
 
     initLabels();
     initScreen();
+    timesUpdated = 0;
   }
 
   boolean isGameOver() {
@@ -120,22 +127,33 @@ class Playfield extends Scene {
 
     inGameScoreLabel = new Label();
     inGameScoreLabel.setId("inGameScoreLabel");
-    inGameScoreLabel.setLayoutX(0);
-    inGameScoreLabel.setLayoutY(0);
+    inGameScoreLabel.setLayoutX(30);
+    inGameScoreLabel.setLayoutY(30);
 
     inGameScoreLabel
         .getStylesheets()
         .add(getClass().getResource("/styles/GeneralStyle.css").toExternalForm());
 
-    ((AnchorPane) getRoot()).getChildren().add(inGameScoreLabel);
+    enemyScoreLabel = new Label();
+    enemyScoreLabel.setId("enemyScoreLabel");
+    enemyScoreLabel.setLayoutX(565);
+    enemyScoreLabel.setLayoutY(30);
+
+    enemyScoreLabel
+        .getStylesheets()
+        .add(getClass().getResource("/styles/GeneralStyle.css").toExternalForm());
+
+    ((AnchorPane) getRoot()).getChildren().addAll(inGameScoreLabel, enemyScoreLabel);
   }
 
   private void initScreen() {
     score = 0;
-    inGameScoreLabel.setText("Score: " + score);
+    enemyScore = 0;
+    inGameScoreLabel.setText("Your Score: " + score);
+    enemyScoreLabel.setText("Enemy Score: " + enemyScore);
 
     renderBackground();
-    initSnake();
+    initSnakes();
     initObstacles();
     apple.place(WIDTH, HEIGHT, obstacles);
     renderGameElements();
@@ -146,15 +164,36 @@ class Playfield extends Scene {
     graphicsContext.fillRect(0, 0, WIDTH, HEIGHT);
   }
 
-  private void initSnake() {
+  private void initSnakes() {
     snake =
         new Snake(
             new Point2D(WIDTH / 2f, HEIGHT / 2f),
             new Point2D(WIDTH / 2f - PIXEL_SIZE, HEIGHT / 2f),
-            PIXEL_SIZE);
+            PIXEL_SIZE,
+            Color.rgb(110, 145, 110));
+
+    enemySnake =
+        new Snake(
+            new Point2D(WIDTH / 2f - 10 * PIXEL_SIZE, HEIGHT / 2f),
+            new Point2D(WIDTH / 2f - 11 * PIXEL_SIZE, HEIGHT / 2f),
+            PIXEL_SIZE,
+            Color.valueOf("EDF5E1"));
   }
 
   private void initObstacles() {
+    addObstacle(new Point2D(0, 0));
+    addObstacle(new Point2D(0, HEIGHT / PIXEL_SIZE));
+    addObstacle(new Point2D(WIDTH / PIXEL_SIZE, 0));
+    for (int pos = PIXEL_SIZE; pos < WIDTH - 1; pos += PIXEL_SIZE) {
+      addObstacle(new Point2D((WIDTH / PIXEL_SIZE - 1) * PIXEL_SIZE, pos));
+      addObstacle(new Point2D(0, pos));
+    }
+
+    for (int pos = PIXEL_SIZE; pos < HEIGHT - 1; pos += PIXEL_SIZE) {
+      addObstacle(new Point2D(pos, 0));
+      addObstacle(new Point2D(pos, (HEIGHT / PIXEL_SIZE - 1) * PIXEL_SIZE));
+    }
+
     while (obstacles.size() < numOfObstacles) {
       placeObstacles();
     }
@@ -164,6 +203,9 @@ class Playfield extends Scene {
     Point2D obstacle = new Point2D(0, 0);
     Point2D temp;
     Point2D head = snake.getHead().getPosition();
+
+    Point2D tempEnemy;
+    Point2D enemyHead = enemySnake.getHead().getPosition();
 
     boolean collision = true;
     boolean tempSnake;
@@ -179,17 +221,20 @@ class Playfield extends Scene {
 
       for (int i = 0; i < snake.getSize(); i++) {
         temp = snake.getBody(i).getPosition();
+        tempEnemy = enemySnake.getBody(i).getPosition();
 
-        if (temp.equals(obstacle)) {
+        if (temp.equals(obstacle) || tempEnemy.equals(obstacle)) {
           break;
         }
 
-        if (obstacle.getX() == head.getX()) {
-          if (Math.abs(obstacle.getY() - head.getY()) < 8 * PIXEL_SIZE) {
+        if (obstacle.getX() == head.getX() || obstacle.getX() == enemyHead.getX()) {
+          if (Math.abs(obstacle.getY() - head.getY()) < 8 * PIXEL_SIZE
+              || Math.abs(obstacle.getY() - enemyHead.getY()) < 8 * PIXEL_SIZE) {
             break;
           }
-        } else if (obstacle.getY() == head.getY()) {
-          if (Math.abs(obstacle.getX() - head.getX()) < 8 * PIXEL_SIZE) {
+        } else if (obstacle.getY() == head.getY() || obstacle.getY() == enemyHead.getY()) {
+          if (Math.abs(obstacle.getX() - head.getX()) < 8 * PIXEL_SIZE
+              || Math.abs(obstacle.getX() - enemyHead.getX()) < 8 * PIXEL_SIZE) {
             break;
           }
         }
@@ -211,15 +256,40 @@ class Playfield extends Scene {
     obstacles.add(new Obstacle(obstacle, WIDTH, HEIGHT));
   }
 
-  private boolean isSnakeInsidePlayableArea() {
+  private boolean isSnakeInsidePlayableArea(Snake snake) {
     double posX = snake.getHead().getPosition().getX();
     double posY = snake.getHead().getPosition().getY();
 
     return posX >= WIDTH || posX < 0 || posY >= HEIGHT || posY < 0;
   }
 
+  private void removeEnemySegmentsIfSnakeCollidesWithEnemy() {
+    List<MovingGameObject> enemySnakeBody = enemySnake.getBody();
+    for (int i = 0; i < enemySnakeBody.size(); i++) {
+      if (snake.getHead().getPosition().equals(enemySnakeBody.get(i).getPosition())) {
+        while (enemySnakeBody.size() > i) {
+          enemySnake.removeSegment(i, graphicsContext);
+          enemyScore--;
+        }
+
+        if (i == 0) {
+          isEnemyDead = true;
+          enemySnake.removeSnake(graphicsContext);
+          enemySnake = null;
+        }
+
+        break;
+      }
+    }
+  }
+
   private void renderGameElements() {
     snake.render(graphicsContext);
+
+    if (!isEnemyDead && enemySnake != null) {
+      enemySnake.render(graphicsContext);
+    }
+
     apple.render(graphicsContext);
     obstacles.forEach(obstacle -> obstacle.render(graphicsContext));
   }
@@ -232,7 +302,6 @@ class Playfield extends Scene {
     Button restartButton = new Button("Restart");
     restartButton.setLayoutX(WIDTH / 2f - 100);
     restartButton.setLayoutY(HEIGHT / 2f);
-
     restartButton
         .getStylesheets()
         .add(getClass().getResource("/styles/GameOverStyle.css").toExternalForm());
@@ -269,9 +338,11 @@ class Playfield extends Scene {
         .add(getClass().getResource("/styles/GameOverStyle.css").toExternalForm());
 
     exitButton.setOnMouseClicked(e -> System.exit(0));
+
     restartButton.setOnMouseClicked(
         e -> {
           isGameOver = false;
+          isEnemyDead = false;
           ((AnchorPane) getRoot())
               .getChildren()
               .removeAll(gameOverLabel, scoreLabel, restartButton, backButton, exitButton);
@@ -286,7 +357,7 @@ class Playfield extends Scene {
         .addAll(gameOverLabel, scoreLabel, restartButton, backButton, exitButton);
   }
 
-  private boolean doesSnakeCollideWithAnObstacle() {
+  private boolean doesSnakeCollideWithAnObstacle(Snake snake) {
     for (Obstacle obstacle : obstacles) {
       if (snake.getHead().getPosition().equals(obstacle.getPosition())) {
         return true;
@@ -301,8 +372,26 @@ class Playfield extends Scene {
 
     @Override
     public void start() {
+      if (!isEnemyDead && enemySnake != null) {
+        snakeAI = new SnakeAI(enemySnake, snake);
+        snakeAI.initializeGrid(obstacles);
+        snakeAI.findPathToApple(obstacles, apple.getPosition());
+      }
+
       super.start();
       isInGame = true;
+
+      if (enemySnake != null) {
+        isEnemyDead = false;
+      }
+
+      timesUpdated++;
+    }
+
+    @Override
+    public void stop() {
+      super.stop();
+      timesUpdated = 0;
     }
 
     @Override
@@ -313,6 +402,11 @@ class Playfield extends Scene {
 
         snake.move();
 
+        if (!isEnemyDead && enemySnake != null) {
+          snakeAI.update(obstacles, apple.getPosition());
+          enemySnake.move();
+        }
+
         if (snake.getHead().doesCollideWith(apple)) {
           do {
             apple.place(WIDTH, HEIGHT, obstacles);
@@ -321,15 +415,46 @@ class Playfield extends Scene {
           score += FOOD_POINT;
           snake.addSegment();
 
-          inGameScoreLabel.setText("Score: " + score);
+          if (!isEnemyDead && enemySnake != null) {
+            snakeAI.findPathToApple(obstacles, apple.getPosition());
+          }
+
+          inGameScoreLabel.setText("Your Score: " + score);
+        } else if (!isEnemyDead
+            && enemySnake != null
+            && enemySnake.getHead().doesCollideWith(apple)) {
+          do {
+            apple.place(WIDTH, HEIGHT, obstacles);
+          } while (enemySnake.doesCollideWith(apple));
+
+          enemyScore += FOOD_POINT;
+          enemySnake.addSegment();
+
+          snakeAI.findPathToApple(obstacles, apple.getPosition());
+
+          enemyScoreLabel.setText("Enemy Score: " + enemyScore);
         }
 
         renderGameElements();
 
+        if (!isEnemyDead
+            && enemySnake != null
+            && (enemySnake.doesCollideWithItself()
+                || isSnakeInsidePlayableArea(enemySnake)
+                || doesSnakeCollideWithAnObstacle(enemySnake))) {
+          isEnemyDead = true;
+          enemySnake.removeSnake(graphicsContext);
+          enemySnake = null;
+        }
+
         if (snake.doesCollideWithItself()
-            || isSnakeInsidePlayableArea()
-            || doesSnakeCollideWithAnObstacle()) {
+            || isSnakeInsidePlayableArea(snake)
+            || doesSnakeCollideWithAnObstacle(snake)) {
           isGameOver = true;
+        }
+
+        if (enemySnake != null) {
+          removeEnemySegmentsIfSnakeCollidesWithEnemy();
         }
 
         if (isGameOver) {
@@ -349,7 +474,11 @@ class Playfield extends Scene {
       String key = keyCode.toString();
       if ((key.equals("RIGHT") || key.equals("LEFT") || key.equals("UP") || key.equals("DOWN"))
           && !isGameOver) {
-        timer.start();
+
+        if (timesUpdated == 0) {
+          timer.start();
+        }
+
         isPaused = false;
       }
       if (key.equals("RIGHT") && snake.getDirection() != Direction.LEFT) {

@@ -7,7 +7,8 @@
   stylesheets="@../styles/GeneralStyle.css" xmlns="http://javafx.com/javafx/8.0.181"
   fx:controller="ru.nsu.fit.oop.arturploter.task_2_2_1.MainMenuController"
   fx:id="background">
-  <VBox AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="81.0" AnchorPane.rightAnchor="81.0" AnchorPane.topAnchor="50.0"
+  <VBox AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="81.0" AnchorPane.rightAnchor="81.0"
+    AnchorPane.topAnchor="50.0"
     layoutX="81.0" layoutY="50.0" prefHeight="300.0" prefWidth="238.0"
     stylesheets="@../styles/MainMenuStyle.css" fx:id="container">
     <Button mnemonicParsing="false" onAction="#startButtonAction" text="Start" fx:id="startButton"/>

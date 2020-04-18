@@ -5,21 +5,22 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-/**
- * The class represents a snake that can be moved in 4 directions.
- */
+/** The class represents a snake that can be moved in 4 directions. */
 class Snake {
-  private final LinkedList<MovingGameObject> body = new LinkedList<>();
-  private final int bodySize;
+  private final LinkedList<MovingGameObject> body;
+  private final int segmentSize;
+  private final Color color;
   private MovingGameObject tail;
 
   private Direction direction = Direction.RIGHT;
 
-  Snake(Point2D head, Point2D tail, int bodySize) {
-    this.bodySize = bodySize;
+  Snake(Point2D head, Point2D tail, int segmentSize, Color color) {
+    this.segmentSize = segmentSize;
+    this.color = color;
 
-    body.add(new MovingGameObject(head, bodySize));
-    body.add(new MovingGameObject(tail, bodySize));
+    body = new LinkedList<>();
+    body.add(new MovingGameObject(head, segmentSize));
+    body.add(new MovingGameObject(tail, segmentSize));
   }
 
   void move() {
@@ -28,26 +29,26 @@ class Snake {
     switch (direction) {
       case UP:
         {
-          Point2D newPos = getHead().getPosition().subtract(0, bodySize);
-          body.addFirst(new MovingGameObject(newPos, bodySize, direction));
+          Point2D newPos = getHead().getPosition().subtract(0, segmentSize);
+          body.addFirst(new MovingGameObject(newPos, segmentSize, direction));
           break;
         }
       case DOWN:
         {
-          Point2D newPos = getHead().getPosition().add(0, bodySize);
-          body.addFirst(new MovingGameObject(newPos, bodySize, direction));
+          Point2D newPos = getHead().getPosition().add(0, segmentSize);
+          body.addFirst(new MovingGameObject(newPos, segmentSize, direction));
           break;
         }
       case LEFT:
         {
-          Point2D newPos = getHead().getPosition().subtract(bodySize, 0);
-          body.addFirst(new MovingGameObject(newPos, bodySize, direction));
+          Point2D newPos = getHead().getPosition().subtract(segmentSize, 0);
+          body.addFirst(new MovingGameObject(newPos, segmentSize, direction));
           break;
         }
       case RIGHT:
         {
-          Point2D newPos = getHead().getPosition().add(bodySize, 0);
-          body.addFirst(new MovingGameObject(newPos, bodySize, direction));
+          Point2D newPos = getHead().getPosition().add(segmentSize, 0);
+          body.addFirst(new MovingGameObject(newPos, segmentSize, direction));
           break;
         }
     }
@@ -78,17 +79,34 @@ class Snake {
   }
 
   void render(GraphicsContext graphicsContext) {
-    graphicsContext.setFill(Color.rgb(110, 145, 110));
+    graphicsContext.setFill(color);
     graphicsContext.fillRect(
-        getHead().getPosition().getX() + 1, getHead().getPosition().getY() + 1, 25, 25);
+        getHead().getPosition().getX(), getHead().getPosition().getY(), 25, 25);
 
-    graphicsContext.setFill(Color.rgb(110, 145, 110));
+    graphicsContext.setFill(color);
     graphicsContext.fillRect(
-        getNeck().getPosition().getX() + 1, getNeck().getPosition().getY() + 1, 25, 25);
+        getNeck().getPosition().getX(),
+        getNeck().getPosition().getY(),
+        Playfield.PIXEL_SIZE,
+        Playfield.PIXEL_SIZE);
 
     if (tail != null) {
       graphicsContext.setFill(Color.valueOf("#161616"));
       tail.render(graphicsContext);
+    }
+  }
+
+  void removeSnake(GraphicsContext graphicsContext) {
+    graphicsContext.setFill(Color.valueOf("#161616"));
+
+    for (int i = 0; i < body.size(); i++) {
+      if (i > 0) {
+        graphicsContext.fillRect(
+            body.get(i).getPosition().getX(),
+            body.get(i).getPosition().getY(),
+            Playfield.PIXEL_SIZE,
+            Playfield.PIXEL_SIZE);
+      }
     }
   }
 
@@ -114,5 +132,23 @@ class Snake {
 
   private MovingGameObject getNeck() {
     return body.get(1);
+  }
+
+  boolean hasSegmentAt(Point2D nextPoint) {
+    return body.stream().anyMatch(segment -> segment.getPosition().equals(nextPoint));
+  }
+
+  void removeSegment(int i, GraphicsContext graphicsContext) {
+    MovingGameObject segment = body.remove(i);
+    graphicsContext.setFill(Color.valueOf("#161616"));
+    graphicsContext.fillRect(
+        segment.getPosition().getX(),
+        segment.getPosition().getY(),
+        Playfield.PIXEL_SIZE,
+        Playfield.PIXEL_SIZE);
+  }
+
+  LinkedList<MovingGameObject> getBody() {
+    return body;
   }
 }

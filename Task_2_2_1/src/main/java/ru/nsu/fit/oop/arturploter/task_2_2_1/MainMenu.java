@@ -11,11 +11,11 @@ import javafx.stage.Stage;
 /**
  * The class represents the application itself. It has one method to start the application.
  *
- * @author  Artur Ploter
+ * @author Artur Ploter
  */
 public class MainMenu extends Application {
-  private static final int WIDTH = 800;
-  private static final int HEIGHT = 800;
+  private static final int WIDTH = 500;
+  private static final int HEIGHT = 500;
 
   @Override
   public void start(Stage primaryStage) {

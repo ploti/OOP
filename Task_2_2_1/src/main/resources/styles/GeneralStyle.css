@@ -23,3 +23,7 @@
 #inGameScoreLabel {
     -fx-font-size: 15px;
 }
+
+#enemyScoreLabel {
+    -fx-font-size: 15px;
+}

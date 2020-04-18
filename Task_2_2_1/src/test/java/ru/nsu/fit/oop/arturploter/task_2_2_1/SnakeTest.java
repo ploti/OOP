@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.stream.IntStream;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,13 +18,13 @@ class SnakeTest {
   void setUp() {
     head = new Point2D(1, 0);
     tail = new Point2D(0, 0);
-    snake = new Snake(head, tail, 1);
+    snake = new Snake(head, tail, 1, Color.rgb(110, 145, 110));
     snake.setDirection(Direction.DOWN);
   }
 
   @Test
   void snakeShouldCollideWithItself() {
-    snake = new Snake(new Point2D(0, 0), tail, 25);
+    snake = new Snake(new Point2D(0, 0), tail, 25, Color.rgb(110, 145, 110));
 
     assertTrue(snake.doesCollideWithItself());
   }

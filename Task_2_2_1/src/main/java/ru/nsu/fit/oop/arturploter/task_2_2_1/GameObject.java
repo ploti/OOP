@@ -4,9 +4,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 
-/**
- * The class represents all the objects in the game
- */
+/** The class represents all the objects in the game */
 class GameObject {
   Point2D position;
   private double width;
@@ -35,7 +33,7 @@ class GameObject {
   }
 
   void render(GraphicsContext graphicsContext) {
-    graphicsContext.fillRect(position.getX() + 1, position.getY() + 1, width, height);
+    graphicsContext.fillRect(position.getX(), position.getY(), width, height);
   }
 
   boolean doesCollideWith(GameObject gameObject) {
