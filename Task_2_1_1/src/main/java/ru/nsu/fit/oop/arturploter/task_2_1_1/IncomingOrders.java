@@ -27,7 +27,7 @@ class IncomingOrders {
     return null;
   }
 
-  boolean areThereNoOrders() {
+  boolean areThereAnyOrders() {
     return pendingOrders.isEmpty();
   }
 }

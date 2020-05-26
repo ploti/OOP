@@ -4,7 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -16,6 +19,8 @@ import java.util.stream.IntStream;
  */
 public class PizzaRestaurant {
   private static final int WAITING_TIME_MILLISECONDS = 3000;
+  private static final int DELIVERY_TIME_SECONDS_MIN = 4;
+  private static final int DELIVERY_TIME_MINUTES_MAX = 20;
 
   private static final List<String> PIZZA_SIZES =
       new ArrayList<>(Arrays.asList("small", "medium", "large", "extra-large"));
@@ -36,6 +41,9 @@ public class PizzaRestaurant {
               "Mimosa",
               "Funghi",
               "Sicilian Pizza"));
+
+  private static final List<Double> PIZZA_PRICES =
+      new ArrayList<>(Arrays.asList(10.59, 7.09, 11.0, 13.49, 4.99, 12.0, 21.09, 3.33, 5.99));
 
   private final Employees employees;
   private final PizzaRestaurantHeadquarters pizzaRestaurantHeadquarters;
@@ -62,33 +70,56 @@ public class PizzaRestaurant {
 
   /**
    * Places orders, processes them, closes the restaurant, and returns the {@code
-   * pizzaRestaurantHeadquarters} object.
+   * pizzaRestaurantHeadquarters} object. New free pizza delivery policy!
    *
-   * @param numOfOrders total number of orders
+   * @param numOfOrdersADay total number of orders
    * @return the {@code pizzaRestaurantHeadquarters} object
    */
-  public PizzaRestaurantHeadquarters start(int numOfOrders) {
-    pizzaChefs.run(employees, warehouse, incomingOrders, pizzaRestaurantHeadquarters);
-    deliveryWorkers.run(employees, warehouse, pizzaRestaurantHeadquarters);
+  public PizzaRestaurantHeadquarters runPizzaRestaurantForSpecifiedNumOfDays(
+      int numOfOrdersADay, int delta, int days) {
+    for (int i = 0; i < days; i++) {
+      System.out.println(" *** DAY " + (i + 1) + " *** ");
 
-    IntStream.range(0, numOfOrders).forEach(i -> order());
-    closeRestaurant();
+      pizzaRestaurantHeadquarters.openRestaurant();
+
+      pizzaChefs.run(employees, warehouse, incomingOrders, pizzaRestaurantHeadquarters);
+      deliveryWorkers.run(employees, warehouse, pizzaRestaurantHeadquarters);
+
+      IntStream.range(0, numOfOrdersADay + ThreadLocalRandom.current().nextInt(delta + 1))
+          .forEach(
+              j ->
+                  order(
+                      ThreadLocalRandom.current()
+                          .nextInt(DELIVERY_TIME_SECONDS_MIN, DELIVERY_TIME_MINUTES_MAX + 1)));
+
+      closeRestaurant();
+    }
 
     return pizzaRestaurantHeadquarters;
   }
 
-  private void order() {
-    Random random = new Random();
+  private void order(int timeLimit) {
+    double total = PIZZA_PRICES.get(ThreadLocalRandom.current().nextInt(PIZZA_SIZES.size()));
+
     System.out.println(
         "ORDER #"
-            + pizzaRestaurantHeadquarters.getCurrentOrderId()
+            + pizzaRestaurantHeadquarters.getAvailableOrderId()
             + ": You successfully ordered "
-            + PIZZA_SIZES.get(random.nextInt(PIZZA_SIZES.size()))
+            + PIZZA_SIZES.get(ThreadLocalRandom.current().nextInt(PIZZA_SIZES.size()))
             + " "
-            + PIZZAS.get(random.nextInt(PIZZAS.size()))
+            + PIZZAS.get(ThreadLocalRandom.current().nextInt(PIZZA_SIZES.size()))
             + ".");
 
-    Order order = new Order(pizzaRestaurantHeadquarters.getCurrentOrderId());
+    System.out.println(
+        "NEW! We pledge to deliver your pizza in "
+            + timeLimit
+            + " seconds or less. If the time taken to deliver the pizza is more than "
+            + timeLimit
+            + " seconds, the pie comes free.");
+
+    System.out.printf("Your total is: $%.2f.\n", total);
+
+    Order order = new Order(pizzaRestaurantHeadquarters.getAvailableOrderId(), timeLimit, total);
     pizzaRestaurantHeadquarters.updateCurrentOrderId();
     incomingOrders.order(order);
   }
@@ -96,7 +127,7 @@ public class PizzaRestaurant {
   private void closeRestaurant() {
     pizzaRestaurantHeadquarters.closeRestaurant();
 
-    while (!incomingOrders.areThereNoOrders()) {
+    while (!incomingOrders.areThereAnyOrders()) {
       try {
         Thread.sleep(WAITING_TIME_MILLISECONDS);
       } catch (InterruptedException e) {
@@ -114,14 +145,68 @@ public class PizzaRestaurant {
       }
     }
 
-    while (!pizzaRestaurantHeadquarters.areAllPizzaChefsFinishedWork()
-        || !pizzaRestaurantHeadquarters.areAllDeliveryWorkersFinishedWork()) {
+    for (int i = 0; i < 5; i++) {
+      if (!pizzaRestaurantHeadquarters.areAllPizzaChefsFinishedWork()
+          || !pizzaRestaurantHeadquarters.areAllDeliveryWorkersFinishedWork()) {
 
-      try {
-        Thread.sleep(WAITING_TIME_MILLISECONDS);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
+        try {
+          Thread.sleep(WAITING_TIME_MILLISECONDS);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
       }
+    }
+
+    pizzaRestaurantHeadquarters.addOneDayToNumOfDaysPassedSinceTheBeginningOfTheWeek();
+
+    if (pizzaRestaurantHeadquarters.getNumOfDaysPassedSinceTheBeginningOfTheWeek() >= 7) {
+      analyzeBusinessPerformance();
+      pizzaRestaurantHeadquarters.startNextWeek();
+    }
+  }
+
+  private void analyzeBusinessPerformance() {
+    System.out.println("=== YOUR WEEKLY BUSINESS REPORT ===");
+
+    if (pizzaRestaurantHeadquarters.getNumOfCompletedOrders() / 7
+        < pizzaRestaurantHeadquarters.getNumOfPizzaChefs()) {
+      System.out.println(
+          "You should find new customers and increase sales or fire "
+              + (pizzaRestaurantHeadquarters.getNumOfPizzaChefs()
+                  - pizzaRestaurantHeadquarters.getNumOfCompletedOrders() / 7)
+              + " pizza chef(s).");
+    }
+
+    if (warehouse.getCapacity() < pizzaRestaurantHeadquarters.getNumOfCompletedOrders() / 7) {
+      System.out.println(
+          "You should increase warehouse storage capacity by at least "
+              + (pizzaRestaurantHeadquarters.getNumOfCompletedOrders() / 7
+                  - warehouse.getCapacity())
+              + " meters.");
+    } else {
+      printIdOfWorkersToBeFired(
+          pizzaRestaurantHeadquarters.getPizzaChefsJobPerformance(), "pizza chef");
+      printIdOfWorkersToBeFired(
+          pizzaRestaurantHeadquarters.getPizzaChefsJobPerformance(), "delivery worker");
+    }
+  }
+
+  private void printIdOfWorkersToBeFired(
+      Map<Integer, Integer> workersJobPerformance, String workerPosition) {
+    List<Integer> workersToBeFired =
+        workersJobPerformance.entrySet().stream()
+            .filter(entry -> entry.getValue() < 0)
+            .map(Entry::getKey)
+            .collect(Collectors.toList());
+
+    if (!workersToBeFired.isEmpty()) {
+      System.out.print("You should fire " + workerPosition + "s with IDs: ");
+
+      for (Integer pizzaChefId : workersToBeFired) {
+        System.out.print(pizzaChefId + " ");
+      }
+
+      System.out.println();
     }
   }
 }

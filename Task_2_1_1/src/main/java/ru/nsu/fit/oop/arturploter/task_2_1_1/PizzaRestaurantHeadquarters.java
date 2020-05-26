@@ -1,5 +1,8 @@
 package ru.nsu.fit.oop.arturploter.task_2_1_1;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The class represents the statistics of the restaurant and other important data.
  *
@@ -12,6 +15,10 @@ public class PizzaRestaurantHeadquarters {
   private int numOfDeliveryWorkers;
   private int numOfPizzaChefsFinishedWork;
   private int numOfDeliveryWorkersFinishedWork;
+  private int numOfDaysPassedSinceTheBeginningOfTheWeek;
+  private double earningsThisWeek;
+  private Map<Integer, Integer> deliveryWorkersJobPerformance;
+  private Map<Integer, Integer> pizzaChefsJobPerformance;
   private boolean restaurantIsClosed;
 
   /** Zeroes all the statistics and data. */
@@ -20,6 +27,10 @@ public class PizzaRestaurantHeadquarters {
     numOfCompletedOrders = 0;
     numOfPizzaChefsFinishedWork = 0;
     numOfDeliveryWorkersFinishedWork = 0;
+    numOfDaysPassedSinceTheBeginningOfTheWeek = 0;
+    earningsThisWeek = 0;
+    deliveryWorkersJobPerformance = new HashMap<>();
+    pizzaChefsJobPerformance = new HashMap<>();
     restaurantIsClosed = false;
   }
 
@@ -64,7 +75,7 @@ public class PizzaRestaurantHeadquarters {
    *
    * @return current order ID
    */
-  public int getCurrentOrderId() {
+  public int getAvailableOrderId() {
     return currentOrderId;
   }
 
@@ -76,16 +87,34 @@ public class PizzaRestaurantHeadquarters {
     restaurantIsClosed = true;
   }
 
-  void completeOrder() {
+  void openRestaurant() {
+    restaurantIsClosed = false;
+  }
+
+  void completeOrder(Order order) {
+    order.completeOrder();
     numOfCompletedOrders++;
+
+    double total = order.getTotal();
+
+    if (order.getOrderProcessingTime() > order.getTimeLimit()) {
+      setEmployeeJobPerformance(pizzaChefsJobPerformance, order.getPizzaChefId());
+      setEmployeeJobPerformance(deliveryWorkersJobPerformance, order.getDeliveryWorkerId());
+
+      System.out.println(
+          "It took more than "
+              + order.getTimeLimit()
+              + " seconds to deliver the pizza. We had to give it away for free.");
+    } else {
+      System.out.printf("Money earned: $%.2f.\n", total);
+    }
+
+    earningsThisWeek += total;
+    System.out.printf("Earnings this week: $%.2f.\n", earningsThisWeek);
   }
 
-  void setNumOfPizzaChefs(int numOfPizzaChefs) {
-    this.numOfPizzaChefs = numOfPizzaChefs;
-  }
-
-  void setNumOfDeliveryWorkers(int numOfDeliveryWorkers) {
-    this.numOfDeliveryWorkers = numOfDeliveryWorkers;
+  void addOneDayToNumOfDaysPassedSinceTheBeginningOfTheWeek() {
+    numOfDaysPassedSinceTheBeginningOfTheWeek++;
   }
 
   void endShiftForPizzaChef() {
@@ -94,5 +123,58 @@ public class PizzaRestaurantHeadquarters {
 
   void endShiftForDeliveryWorker() {
     numOfDeliveryWorkersFinishedWork++;
+  }
+
+  void startNextWeek() {
+    currentOrderId = 0;
+    numOfCompletedOrders = 0;
+    numOfPizzaChefsFinishedWork = 0;
+    numOfDeliveryWorkersFinishedWork = 0;
+    numOfDaysPassedSinceTheBeginningOfTheWeek = 0;
+    earningsThisWeek = 0;
+    deliveryWorkersJobPerformance = new HashMap<>();
+    pizzaChefsJobPerformance = new HashMap<>();
+    restaurantIsClosed = false;
+  }
+
+  int getNumOfDaysPassedSinceTheBeginningOfTheWeek() {
+    return numOfDaysPassedSinceTheBeginningOfTheWeek;
+  }
+
+  int getNumOfCompletedOrders() {
+    return numOfCompletedOrders;
+  }
+
+  int getNumOfPizzaChefs() {
+    return numOfPizzaChefs;
+  }
+
+  void setNumOfPizzaChefs(int numOfPizzaChefs) {
+    this.numOfPizzaChefs = numOfPizzaChefs;
+  }
+
+  int getNumOfDeliveryWorkers() {
+    return numOfDeliveryWorkers;
+  }
+
+  void setNumOfDeliveryWorkers(int numOfDeliveryWorkers) {
+    this.numOfDeliveryWorkers = numOfDeliveryWorkers;
+  }
+
+  Map<Integer, Integer> getDeliveryWorkersJobPerformance() {
+    return deliveryWorkersJobPerformance;
+  }
+
+  Map<Integer, Integer> getPizzaChefsJobPerformance() {
+    return pizzaChefsJobPerformance;
+  }
+
+  private void setEmployeeJobPerformance(
+      Map<Integer, Integer> employeeJobPerformance, int workerId) {
+    if (!employeeJobPerformance.containsKey(workerId)) {
+      employeeJobPerformance.put(workerId, -2);
+    } else {
+      employeeJobPerformance.put(workerId, employeeJobPerformance.get(workerId) - 2);
+    }
   }
 }

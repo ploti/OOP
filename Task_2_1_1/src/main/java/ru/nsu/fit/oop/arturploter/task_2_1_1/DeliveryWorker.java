@@ -27,6 +27,7 @@ class DeliveryWorker implements Runnable {
       @JsonProperty("id") int id,
       @JsonProperty("deliveryTime") int deliveryTime,
       @JsonProperty("howManyPizzasCanCarry") int numOfPizzasCanCarry) {
+
     this.id = id;
     this.deliveryTime = deliveryTime;
     this.numOfPizzasCanCarry = numOfPizzasCanCarry;
@@ -68,20 +69,13 @@ class DeliveryWorker implements Runnable {
           if (bag.size() != 0) {
             try {
               order = warehouse.pickItemForDelivery(WAITING_TIME_MILLISECONDS);
-
-              if (order == null) {
-                System.out.println(
-                    "DELIVERY WORKER #"
-                        + id
-                        + " is on the way! Another pizza would fit in the bag.");
-                break;
-              }
+              order.setDeliveryWorkerId(id);
 
               bag.add(order);
               System.out.println(
                   "DELIVERY WORKER #"
                       + id
-                      + " picked up the ORDER #"
+                      + " picked up ORDER #"
                       + order.getId()
                       + ". He has "
                       + bag.size()
@@ -138,12 +132,13 @@ class DeliveryWorker implements Runnable {
       try {
         for (Order order : bag) {
           Thread.sleep(deliveryTime);
-          pizzaRestaurantHeadquarters.completeOrder();
           System.out.println(
               "DELIVERY WORKER #" + id + " left your shitty pizza(s) in the trash. Bon appetit!");
+
+          pizzaRestaurantHeadquarters.completeOrder(order);
         }
 
-        System.out.println("DELIVERY WORKER #" + id + " delivered all the orders.");
+        System.out.println("DELIVERY WORKER #" + id + " delivered all orders.");
         Thread.sleep(deliveryTime);
         bag.clear();
       } catch (InterruptedException e) {

@@ -87,9 +87,6 @@ class MyArrayBlockingQueue<E> {
     return x;
   }
 
-  // this doc comment is overridden to remove the reference to collections
-  // greater in size than Integer.MAX_VALUE
-
   int size() {
     final ReentrantLock lock = this.lock;
     lock.lock();

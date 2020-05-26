@@ -47,19 +47,23 @@ class PizzaChef implements Runnable {
   public void run() {
 
     while (!pizzaRestaurantHeadquarters.isRestaurantClosed()
-        || !incomingOrders.areThereNoOrders()) {
+        || !incomingOrders.areThereAnyOrders()) {
 
       Order currentOrder;
 
       try {
-        this.waitingForOrder = true;
+        waitingForOrder = true;
         pizzaChefs.lock.lock();
-        if (pizzaRestaurantHeadquarters.isRestaurantClosed() && incomingOrders.areThereNoOrders()) {
+
+        if (pizzaRestaurantHeadquarters.isRestaurantClosed()
+            && incomingOrders.areThereAnyOrders()) {
           break;
         }
 
         currentOrder = incomingOrders.takeOrder();
-        this.waitingForOrder = false;
+        currentOrder.setPizzaChefId(id);
+
+        waitingForOrder = false;
       } finally {
         pizzaChefs.lock.unlock();
       }
@@ -73,9 +77,11 @@ class PizzaChef implements Runnable {
               + " just finished making a pizza. ORDER #"
               + currentOrder.getId()
               + ".");
+
       System.out.println("PIZZA CHEF #" + id + " stuck your pizza in the warehouse.");
       warehouse.putItemAwayInWarehouse(currentOrder);
     }
+
     pizzaRestaurantHeadquarters.endShiftForPizzaChef();
     System.out.println("PIZZA CHEF #" + id + " is done for today.");
   }
