@@ -149,10 +149,10 @@ public class PizzaRestaurantTest {
     PizzaRestaurant pizzaRestaurant = new PizzaRestaurant(employeesParameters, 10);
 
     PizzaRestaurantHeadquarters pizzaRestaurantHeadquarters =
-        pizzaRestaurant.runPizzaRestaurantForSpecifiedNumOfDays(5, 1, 7);
+        pizzaRestaurant.runPizzaRestaurantForSpecifiedNumOfDays(10, 0, 2);
 
     Assert.assertEquals(
-        pizzaRestaurantHeadquarters.getNumOfDaysPassedSinceTheBeginningOfTheWeek(), 0);
+        2, pizzaRestaurantHeadquarters.getNumOfDaysPassedSinceTheBeginningOfTheWeek());
 
     System.out.println();
   }

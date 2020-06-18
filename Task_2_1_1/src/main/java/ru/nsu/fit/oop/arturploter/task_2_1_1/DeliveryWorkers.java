@@ -11,6 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 class DeliveryWorkers {
   final Lock lock;
   private final List<Future<?>> orders;
+  private ExecutorService executor;
 
   DeliveryWorkers() {
     orders = new ArrayList<>();
@@ -23,7 +24,7 @@ class DeliveryWorkers {
       PizzaRestaurantHeadquarters pizzaRestaurantHeadquarters) {
 
     pizzaRestaurantHeadquarters.setNumOfDeliveryWorkers(employees.deliveryWorkers.length);
-    ExecutorService executor = Executors.newFixedThreadPool(employees.deliveryWorkers.length);
+    executor = Executors.newFixedThreadPool(employees.deliveryWorkers.length);
 
     for (DeliveryWorker deliveryWorker : employees.deliveryWorkers) {
       deliveryWorker.setDeliveryWorkers(this);
@@ -33,6 +34,10 @@ class DeliveryWorkers {
       Future<?> future = executor.submit(deliveryWorker);
       orders.add(future);
     }
+  }
+
+  public ExecutorService getExecutor() {
+    return executor;
   }
 
   List<Future<?>> getOrders() {

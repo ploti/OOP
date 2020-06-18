@@ -10,6 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
 class PizzaChefs {
   final Lock lock;
   private final List<FutureObjectPair> pizzaChefsWithTheirPizzas;
+  private ExecutorService executorService;
 
   PizzaChefs() {
     this.pizzaChefsWithTheirPizzas = new ArrayList<>();
@@ -23,7 +24,7 @@ class PizzaChefs {
       PizzaRestaurantHeadquarters pizzaRestaurantHeadquarters) {
 
     pizzaRestaurantHeadquarters.setNumOfPizzaChefs(employees.pizzaChefs.length);
-    ExecutorService executorService = Executors.newFixedThreadPool(employees.pizzaChefs.length);
+    executorService = Executors.newFixedThreadPool(employees.pizzaChefs.length);
 
     for (PizzaChef pizzaChef : employees.pizzaChefs) {
       pizzaChef.setPizzaChefs(this);
@@ -34,6 +35,10 @@ class PizzaChefs {
       pizzaChefsWithTheirPizzas.add(
           new FutureObjectPair(pizzaChef, executorService.submit(pizzaChef)));
     }
+  }
+
+  public ExecutorService getExecutorService() {
+    return executorService;
   }
 
   List<FutureObjectPair> getPizzaChefsWithTheirPizzas() {

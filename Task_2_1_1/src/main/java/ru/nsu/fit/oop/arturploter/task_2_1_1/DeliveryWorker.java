@@ -110,7 +110,7 @@ class DeliveryWorker implements Runnable {
             System.out.println(
                 "DELIVERY WORKER #"
                     + id
-                    + " picked up the ORDER #"
+                    + " picked up ORDER #"
                     + Objects.requireNonNull(order).getId()
                     + ". He has "
                     + bag.size()

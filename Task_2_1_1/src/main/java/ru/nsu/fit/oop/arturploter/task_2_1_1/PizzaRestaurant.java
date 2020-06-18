@@ -19,8 +19,8 @@ import java.util.stream.IntStream;
  */
 public class PizzaRestaurant {
   private static final int WAITING_TIME_MILLISECONDS = 3000;
-  private static final int DELIVERY_TIME_SECONDS_MIN = 4;
-  private static final int DELIVERY_TIME_MINUTES_MAX = 20;
+  private static final int DELIVERY_TIME_SECONDS_MIN = 6;
+  private static final int DELIVERY_TIME_MINUTES_MAX = 40;
 
   private static final List<String> PIZZA_SIZES =
       new ArrayList<>(Arrays.asList("small", "medium", "large", "extra-large"));
@@ -51,6 +51,7 @@ public class PizzaRestaurant {
   private final Warehouse warehouse;
   private final PizzaChefs pizzaChefs;
   private final DeliveryWorkers deliveryWorkers;
+  private boolean isWeeklyReport;
 
   /**
    * Initializes the restaurant with the given employees parameters and warehouse capacity.
@@ -68,6 +69,13 @@ public class PizzaRestaurant {
     deliveryWorkers = new DeliveryWorkers();
   }
 
+  public static void main(String[] args) {
+    File employeesParameters = new File("src/main/resources/Employees.json");
+    PizzaRestaurant pizzaRestaurant = new PizzaRestaurant(employeesParameters, 10);
+
+    pizzaRestaurant.runPizzaRestaurantForSpecifiedNumOfDays(3, 0, 1);
+  }
+
   /**
    * Places orders, processes them, closes the restaurant, and returns the {@code
    * pizzaRestaurantHeadquarters} object. New free pizza delivery policy!
@@ -77,6 +85,9 @@ public class PizzaRestaurant {
    */
   public PizzaRestaurantHeadquarters runPizzaRestaurantForSpecifiedNumOfDays(
       int numOfOrdersADay, int delta, int days) {
+
+    isWeeklyReport = days >= 7;
+
     for (int i = 0; i < days; i++) {
       System.out.println(" *** DAY " + (i + 1) + " *** ");
 
@@ -145,42 +156,67 @@ public class PizzaRestaurant {
       }
     }
 
-    for (int i = 0; i < 5; i++) {
-      if (!pizzaRestaurantHeadquarters.areAllPizzaChefsFinishedWork()
-          || !pizzaRestaurantHeadquarters.areAllDeliveryWorkersFinishedWork()) {
+    while (!pizzaRestaurantHeadquarters.areAllPizzaChefsFinishedWork()
+        || !pizzaRestaurantHeadquarters.areAllDeliveryWorkersFinishedWork()) {
 
-        try {
-          Thread.sleep(WAITING_TIME_MILLISECONDS);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
+      try {
+        Thread.sleep(WAITING_TIME_MILLISECONDS);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
       }
     }
 
     pizzaRestaurantHeadquarters.addOneDayToNumOfDaysPassedSinceTheBeginningOfTheWeek();
 
-    if (pizzaRestaurantHeadquarters.getNumOfDaysPassedSinceTheBeginningOfTheWeek() >= 7) {
+    if (!isWeeklyReport
+        || pizzaRestaurantHeadquarters.getNumOfDaysPassedSinceTheBeginningOfTheWeek() >= 7) {
+
       analyzeBusinessPerformance();
-      pizzaRestaurantHeadquarters.startNextWeek();
+
+      if (pizzaRestaurantHeadquarters.getNumOfDaysPassedSinceTheBeginningOfTheWeek() >= 7) {
+        pizzaRestaurantHeadquarters.startNextWeek();
+      }
     }
+
+    pizzaChefs.getExecutorService().shutdownNow();
+    deliveryWorkers.getExecutor().shutdownNow();
   }
 
   private void analyzeBusinessPerformance() {
-    System.out.println("=== YOUR WEEKLY BUSINESS REPORT ===");
+    if (isWeeklyReport) {
+      System.out.println("=== YOUR WEEKLY BUSINESS REPORT ===");
+    } else {
+      System.out.println("=== YOUR DAILY BUSINESS REPORT ===");
+    }
 
-    if (pizzaRestaurantHeadquarters.getNumOfCompletedOrders() / 7
+    double revenue = pizzaRestaurantHeadquarters.getRevenue();
+    int numOfDays = pizzaRestaurantHeadquarters.getNumOfDaysPassedSinceTheBeginningOfTheWeek();
+
+    System.out.printf(
+        "Completed %d order(s). Earnings so far: $%.2f. Revenue: $%.2f.\n",
+        pizzaRestaurantHeadquarters.getNumOfCompletedOrders(),
+        pizzaRestaurantHeadquarters.getEarningsThisWeek(),
+        revenue);
+
+    if (revenue < 0) {
+      System.out.println(
+          "Your pizza restaurant has a budget deficit! Hire new delivery workers to deliver pizza faster.");
+    }
+
+    if (pizzaRestaurantHeadquarters.getNumOfCompletedOrders() / numOfDays
         < pizzaRestaurantHeadquarters.getNumOfPizzaChefs()) {
       System.out.println(
           "You should find new customers and increase sales or fire "
               + (pizzaRestaurantHeadquarters.getNumOfPizzaChefs()
-                  - pizzaRestaurantHeadquarters.getNumOfCompletedOrders() / 7)
+                  - pizzaRestaurantHeadquarters.getNumOfCompletedOrders() / numOfDays)
               + " pizza chef(s).");
     }
 
-    if (warehouse.getCapacity() < pizzaRestaurantHeadquarters.getNumOfCompletedOrders() / 7) {
+    if (warehouse.getCapacity()
+        < pizzaRestaurantHeadquarters.getNumOfCompletedOrders() / numOfDays) {
       System.out.println(
           "You should increase warehouse storage capacity by at least "
-              + (pizzaRestaurantHeadquarters.getNumOfCompletedOrders() / 7
+              + (pizzaRestaurantHeadquarters.getNumOfCompletedOrders() / numOfDays
                   - warehouse.getCapacity())
               + " meters.");
     } else {
@@ -200,7 +236,7 @@ public class PizzaRestaurant {
             .collect(Collectors.toList());
 
     if (!workersToBeFired.isEmpty()) {
-      System.out.print("You should fire " + workerPosition + "s with IDs: ");
+      System.out.print("You should fire " + workerPosition + "(s) with ID(s): ");
 
       for (Integer pizzaChefId : workersToBeFired) {
         System.out.print(pizzaChefId + " ");

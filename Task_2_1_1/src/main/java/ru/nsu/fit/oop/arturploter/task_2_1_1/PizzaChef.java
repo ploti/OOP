@@ -82,8 +82,11 @@ class PizzaChef implements Runnable {
       warehouse.putItemAwayInWarehouse(currentOrder);
     }
 
-    pizzaRestaurantHeadquarters.endShiftForPizzaChef();
-    System.out.println("PIZZA CHEF #" + id + " is done for today.");
+    while (true) {
+      pizzaRestaurantHeadquarters.endShiftForPizzaChef();
+      System.out.println("PIZZA CHEF #" + id + " is done for today.");
+      break;
+    }
   }
 
   int getId() {

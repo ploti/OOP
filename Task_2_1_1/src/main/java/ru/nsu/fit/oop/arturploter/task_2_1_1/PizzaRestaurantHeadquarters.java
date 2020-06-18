@@ -17,6 +17,7 @@ public class PizzaRestaurantHeadquarters {
   private int numOfDeliveryWorkersFinishedWork;
   private int numOfDaysPassedSinceTheBeginningOfTheWeek;
   private double earningsThisWeek;
+  private double revenue;
   private Map<Integer, Integer> deliveryWorkersJobPerformance;
   private Map<Integer, Integer> pizzaChefsJobPerformance;
   private boolean restaurantIsClosed;
@@ -29,6 +30,7 @@ public class PizzaRestaurantHeadquarters {
     numOfDeliveryWorkersFinishedWork = 0;
     numOfDaysPassedSinceTheBeginningOfTheWeek = 0;
     earningsThisWeek = 0;
+    revenue = 0;
     deliveryWorkersJobPerformance = new HashMap<>();
     pizzaChefsJobPerformance = new HashMap<>();
     restaurantIsClosed = false;
@@ -96,6 +98,7 @@ public class PizzaRestaurantHeadquarters {
     numOfCompletedOrders++;
 
     double total = order.getTotal();
+    revenue -= (total / 2);
 
     if (order.getOrderProcessingTime() > order.getTimeLimit()) {
       setEmployeeJobPerformance(pizzaChefsJobPerformance, order.getPizzaChefId());
@@ -107,14 +110,15 @@ public class PizzaRestaurantHeadquarters {
               + " seconds to deliver the pizza. We had to give it away for free.");
     } else {
       System.out.printf("Money earned: $%.2f.\n", total);
+      earningsThisWeek += total;
+      revenue += total;
     }
-
-    earningsThisWeek += total;
-    System.out.printf("Earnings this week: $%.2f.\n", earningsThisWeek);
   }
 
   void addOneDayToNumOfDaysPassedSinceTheBeginningOfTheWeek() {
     numOfDaysPassedSinceTheBeginningOfTheWeek++;
+    numOfPizzaChefsFinishedWork = 0;
+    numOfDeliveryWorkersFinishedWork = 0;
   }
 
   void endShiftForPizzaChef() {
@@ -132,6 +136,7 @@ public class PizzaRestaurantHeadquarters {
     numOfDeliveryWorkersFinishedWork = 0;
     numOfDaysPassedSinceTheBeginningOfTheWeek = 0;
     earningsThisWeek = 0;
+    revenue = 0;
     deliveryWorkersJobPerformance = new HashMap<>();
     pizzaChefsJobPerformance = new HashMap<>();
     restaurantIsClosed = false;
@@ -167,6 +172,14 @@ public class PizzaRestaurantHeadquarters {
 
   Map<Integer, Integer> getPizzaChefsJobPerformance() {
     return pizzaChefsJobPerformance;
+  }
+
+  double getEarningsThisWeek() {
+    return earningsThisWeek;
+  }
+
+  double getRevenue() {
+    return revenue;
   }
 
   private void setEmployeeJobPerformance(

@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group 'ru.nsu.fit.oop.arturploter.task_2_1_1'
@@ -11,6 +12,8 @@ repositories {
     mavenCentral()
 }
 
+mainClassName = 'ru.nsu.fit.oop.arturploter.task_2_1_1.PizzaRestaurant'
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile(
@@ -20,7 +23,8 @@ dependencies {
     )
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
-
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.6.0")
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.6.0")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.6.0")
 }
 
